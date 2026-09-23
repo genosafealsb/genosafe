@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GenoSafe | Confidencialidad y Privacidad Genómica</title>
+  
+  <!-- Fuente tipográfica moderna 'Inter' desde Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. PALETA DE COLORES EDITABLE (VARIABLES CSS)
+       --------------------------------------------------------------------------
+       Puedes modificar estos códigos hexadecimales (#...) por los colores que
+       más te gusten para tu trabajo.
+       ========================================================================== */
+    :root {
+      /* [EDITA AQUÍ TUS COLORES] */
+      --color-primario: #0d9488;          /* Color principal (botones, acentos, títulos clave) */
+      --color-primario-hover: #0f766e;    /* Color del botón al pasar el ratón */
+      --color-secundario: #0284c7;        /* Segundo color de apoyo (enlaces, etiquetas) */
+      --color-fondo: #f8fafc;             /* Fondo general de la página */
+      --color-superficie: #ffffff;        /* Fondo de tarjetas, bloques y barra superior */
+      --color-superficie-alt: #f1f5f9;    /* Fondo suave alternativo para secciones */
+      --color-texto: #0f172a;             /* Color principal del texto */
+      --color-texto-secundario: #475569;  /* Color de párrafos y textos secundarios */
+      --color-borde: #e2e8f0;             /* Color de líneas divisorias y marcos */
+      --radio-borde: 14px;                /* Redondeo de tarjetas y botones */
+      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Temas preconfigurados para probar combinaciones en vivo */
+    [data-tema="azul"] {
+      --color-primario: #2563eb;
+      --color-primario-hover: #1d4ed8;
+      --color-secundario: #0891b2;
+      --color-fondo: #f8fafc;
+      --color-superficie: #ffffff;
+      --color-superficie-alt: #f1f5f9;
+      --color-texto: #0f172a;
+      --color-texto-secundario: #475569;
+      --color-borde: #e2e8f0;
+    }
+
+    [data-tema="verde"] {
+      --color-primario: #059669;
+      --color-primario-hover: #047857;
+      --color-secundario: #10b981;
+      --color-fondo: #fbfdfc;
+      --color-superficie: #ffffff;
+      --color-superficie-alt: #f0fdf4;
+      --color-texto: #064e3b;
+      --color-texto-secundario: #374151;
+      --color-borde: #dcfce7;
+    }
+
+    [data-tema="oscuro"] {
+      --color-primario: #14b8a6;
+      --color-primario-hover: #2dd4bf;
+      --color-secundario: #38bdf8;
+      --color-fondo: #090d16;
+      --color-superficie: #111827;
+      --color-superficie-alt: #1f2937;
+      --color-texto: #f9fafb;
+      --color-texto-secundario: #9ca3af;
+      --color-borde: #374151;
+      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--color-fondo);
+      color: var(--color-texto);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    a {
+      color: var(--color-primario);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      color: var(--color-primario-hover);
+    }
+
+    .contenedor {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Barra flotante para cambiar tema en vivo */
+    .selector-tema {
+      background: var(--color-superficie);
+      border-bottom: 1px solid var(--color-borde);
+      padding: 0.6rem 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: var(--color-texto-secundario);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .btn-color {
+      border: 1px solid var(--color-borde);
+      background: var(--color-superficie-alt);
+      color: var(--color-texto);
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
+
+    .btn-color:hover {
+      border-color: var(--color-primario);
+    }
+
+    .circulo-muestra {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Barra de navegación */
+    header.barra-navegacion {
+      background-color: var(--color-superficie);
+      border-bottom: 1px solid var(--color-borde);
+      padding: 1.1rem 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    .nav-contenido {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-grupo {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-texto);
+    }
+
+    .logo-icono {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    nav.enlaces-nav {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+    }
+
+    nav.enlaces-nav a {
+      color: var(--color-texto-secundario);
+    }
+
+    nav.enlaces-nav a:hover {
+      color: var(--color-primario);
+    }
+
+    /* Portada / Hero */
+    .hero {
+      padding: 5rem 0 4rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .etiqueta-academica {
+      display: inline-block;
+      padding: 0.35rem 0.9rem;
+      background-color: var(--color-superficie-alt);
+      border: 1px solid var(--color-borde);
+      color: var(--color-primario);
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .hero-titulo {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 1.25rem;
+      color: var(--color-texto);
+    }
+
+    .hero-titulo span {
+      color: var(--color-primario);
+    }
+
+    .hero-subtitulo {
+      font-size: 1.2rem;
+      color: var(--color-texto-secundario);
+      max-width: 780px;
+      margin: 0 auto 2.2rem;
+      font-weight: 400;
+    }
+
+    .grupo-botones {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radio-borde);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-principal {
+      background-color: var(--color-primario);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-principal:hover {
+      background-color: var(--color-primario-hover);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .btn-secundario {
+      background-color: var(--color-superficie);
+      color: var(--color-texto);
+      border: 1px solid var(--color-borde);
+    }
+
+    .btn-secundario:hover {
+      background-color: var(--color-superficie-alt);
+      transform: translateY(-2px);
+    }
+
+    /* Secciones generales */
+    section.seccion {
+      padding: 4.5rem 0;
+    }
+
+    section.seccion-alt {
+      background-color: var(--color-superficie-alt);
+      border-top: 1px solid var(--color-borde);
+      border-bottom: 1px solid var(--color-borde);
+    }
+
+    .cabecera-seccion {
+      text-align: center;
+      max-width: 650px;
+      margin: 0 auto 3rem;
+    }
+
+    .subtitulo-seccion {
+      color: var(--color-primario);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .titulo-seccion {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-texto);
+      letter-spacing: -0.5px;
+    }
+
+    .descripcion-seccion {
+      color: var(--color-texto-secundario);
+      margin-top: 0.75rem;
+      font-size: 1rem;
+    }
+
+    /* Bloque 'Sobre el proyecto' */
+    .caja-resumen {
+      background: var(--color-superficie);
+      border: 1px solid var(--color-borde);
+      border-radius: var(--radio-borde);
+      padding: 2.2rem;
+      box-shadow: var(--sombra);
+      margin-bottom: 2rem;
+    }
+
+    .caja-resumen p {
+      color: var(--color-texto-secundario);
+      margin-bottom: 1.2rem;
+    }
+
+    .caja-resumen p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Cuadrículas y Tarjetas de temas */
+    .cuadricula-tarjetas {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tarjeta {
+      background-color: var(--color-superficie);
+      border: 1px solid var(--color-borde);
+      border-radius: var(--radio-borde);
+      padding: 1.8rem;
+      box-shadow: var(--sombra);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-4px);
+      border-color: var(--color-primario);
+    }
+
+    .icono-tarjeta {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background-color: var(--color-superficie-alt);
+      color: var(--color-primario);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tarjeta h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.6rem;
+      color: var(--color-texto);
+    }
+
+    .tarjeta p {
+      font-size: 0.92rem;
+      color: var(--color-texto-secundario);
+      line-height: 1.55;
+    }
+
+    /* Miembros del equipo */
+    .cuadricula-equipo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .tarjeta-miembro {
+      background: var(--color-superficie);
+      border: 1px solid var(--color-borde);
+      border-radius: var(--radio-borde);
+      padding: 1.8rem 1.2rem;
+      text-align: center;
+      box-shadow: var(--sombra);
+      transition: transform 0.2s ease;
+    }
+
+    .tarjeta-miembro:hover {
+      transform: translateY(-3px);
+    }
+
+    .avatar-miembro {
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.1rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nombre-miembro {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-texto);
+      margin-bottom: 0.2rem;
+    }
+
+    .rol-miembro {
+      font-size: 0.82rem;
+      color: var(--color-primario);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .desc-miembro {
+      font-size: 0.82rem;
+      color: var(--color-texto-secundario);
+    }
+
+    /* Lista bibliográfica / Recursos */
+    .lista-recursos {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .item-recurso {
+      background: var(--color-superficie);
+      border: 1px solid var(--color-borde);
+      border-radius: var(--radio-borde);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .num-recurso {
+      background: var(--color-superficie-alt);
+      color: var(--color-primario);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid var(--color-borde);
+      flex-shrink: 0;
+    }
+
+    .texto-recurso {
+      font-size: 0.92rem;
+      color: var(--color-texto-secundario);
+    }
+
+    .texto-recurso strong {
+      color: var(--color-texto);
+    }
+
+    footer.pie-pagina {
+      background-color: var(--color-superficie);
+      border-top: 1px solid var(--color-borde);
+      padding: 3rem 0 2rem;
+      font-size: 0.85rem;
+      color: var(--color-texto-secundario);
+    }
+
+    .pie-contenido {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    /* Responsividad en pantallas pequeñas */
+    @media (max-width: 768px) {
+      .hero-titulo {
+        font-size: 2.1rem;
+      }
+      .hero-subtitulo {
+        font-size: 1.05rem;
+      }
+      nav.enlaces-nav {
+        display: none; /* Simplificado para móviles */
+      }
+      .pie-contenido {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       BARRA SUPERIOR: SELECTOR DE TEMAS EN VIVO (Para que pruebes colores)
+       ======================================================================== -->
+  <div class="selector-tema">
+    <span>💡 <strong>Selector de Colores en Vivo:</strong></span>
+    <button class="btn-color" onclick="cambiarTema('teal')">
+      <span class="circulo-muestra" style="background:#0d9488;"></span> GenoSafe Verde Azulado
+    </button>
+    <button class="btn-color" onclick="cambiarTema('azul')">
+      <span class="circulo-muestra" style="background:#2563eb;"></span> Azul Médico
+    </button>
+    <button class="btn-color" onclick="cambiarTema('verde')">
+      <span class="circulo-muestra" style="background:#059669;"></span> Bioética Verde
+    </button>
+    <button class="btn-color" onclick="cambiarTema('oscuro')">
+      <span class="circulo-muestra" style="background:#111827;"></span> Modo Oscuro
+    </button>
+  </div>
+
+  <!-- ========================================================================
+       SECCIÓN 1: BARRA DE NAVEGACIÓN
+       ======================================================================== -->
+  <header class="barra-navegacion">
+    <div class="contenedor nav-contenido">
+      
+      <!-- [EDITA AQUÍ]: Nombre y logo de tu grupo -->
+      <a href="#inicio" class="logo-grupo">
+        <div class="logo-icono">GS</div>
+        <span>GenoSafe</span>
+      </a>
+
+      <!-- [EDITA AQUÍ]: Enlaces del menú superior -->
+      <nav>
+        <ul class="enlaces-nav">
+          <li><a href="#inicio">Inicio</a></li>
+          <li><a href="#proyecto">El Proyecto</a></li>
+          <li><a href="#temas">Puntos Clave</a></li>
+          <li><a href="#equipo">Equipo</a></li>
+          <li><a href="#bibliografia">Bibliografía</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       SECCIÓN 2: PORTADA / HERO (Encabezado principal de la web)
+       ======================================================================== -->
+  <section id="inicio" class="hero">
+    <div class="contenedor">
+      
+      <!-- [EDITA AQUÍ]: Asignatura, curso o titulación académica -->
+      <span class="etiqueta-academica">
+        Trabajo Académico • Curso 2026-2027
+      </span>
+
+      <!-- [EDITA AQUÍ]: Título principal de tu proyecto -->
+      <h1 class="hero-titulo">
+        Confidencialidad y Privacidad en la <span>Información Genética</span>
+      </h1>
+
+      <!-- [EDITA AQUÍ]: Subtítulo o resumen del trabajo en una o dos líneas -->
+      <p class="hero-subtitulo">
+        Investigación bioética, jurídica y computacional sobre la protección del ADN, el consentimiento informado y los riesgos de reidentificación en biobancos masivos.
+      </p>
+
+      <!-- [EDITA AQUÍ]: Botones principales de acción -->
+      <div class="grupo-botones">
+        <a href="#proyecto" class="btn btn-principal">Conoce el Proyecto</a>
+        <a href="#temas" class="btn btn-secundario">Ver Puntos a Tratar</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 3: SOBRE EL PROYECTO / INTRODUCCIÓN TEÓRICA
+       ======================================================================== -->
+  <section id="proyecto" class="seccion seccion-alt">
+    <div class="contenedor">
+      
+      <div class="cabecera-seccion">
+        <span class="subtitulo-seccion">Contexto y Objetivos</span>
+        <h2 class="titulo-seccion">¿Por qué nace GenoSafe?</h2>
+        <p class="descripcion-seccion">
+          La secuenciación genómica plantea dilemas inéditos que superan los mecanismos clásicos de protección de datos.
+        </p>
+      </div>
+
+      <!-- [EDITA AQUÍ]: Redacta aquí la introducción o marco teórico de tu grupo -->
+      <div class="caja-resumen">
+        <p>
+          <strong>La singularidad del dato biológico:</strong> A diferencia de un correo electrónico o una clave bancaria, el código genético es <em>permanente, inalterable y no revocable</em>. Cuando una secuencia de ADN se filtra, la pérdida de privacidad es vitalicia y no solo afecta al individuo que cedió la muestra, sino también a sus progenitores, hijos y parientes colaterales.
+        </p>
+        <p>
+          <strong>Objetivo de nuestro trabajo:</strong> Con este estudio, el grupo <strong>GenoSafe</strong> busca analizar cómo compatibilizar el necesario avance de la medicina personalizada y la investigación científica con el respeto escrupuloso a los derechos fundamentales, tales como el artículo 9 del Reglamento General de Protección de Datos (RGPD) y las directrices bioéticas internacionales.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 4: TARJETAS DE TEMAS CLAVE / PUNTOS A TRATAR
+       ======================================================================== -->
+  <section id="temas" class="seccion">
+    <div class="contenedor">
+      
+      <div class="cabecera-seccion">
+        <span class="subtitulo-seccion">Áreas de Investigación</span>
+        <h2 class="titulo-seccion">Puntos Clave del Trabajo</h2>
+        <p class="descripcion-seccion">
+          Los 4 pilares fundamentales sobre los que hemos estructurado nuestra defensa académica.
+        </p>
+      </div>
+
+      <div class="cuadricula-tarjetas">
+        
+        <!-- [EDITA AQUÍ]: Tarjeta 1 -->
+        <article class="tarjeta">
+          <div class="icono-tarjeta">🔒</div>
+          <h3>1. Irrevocabilidad y Parentesco</h3>
+          <p>
+            El ADN es compartido en un 50% con parientes de primer grado. Subir una muestra a plataformas abiertas expone el mapa genético de familiares sin su consentimiento explícito previo.
+          </p>
+        </article>
+
+        <!-- [EDITA AQUÍ]: Tarjeta 2 -->
+        <article class="tarjeta">
+          <div class="icono-tarjeta">⚖️</div>
+          <h3>2. Marco Legal y RGPD</h3>
+          <p>
+            Análisis de los datos genéticos como 'categoría especial' de datos. Prohibición general de tratamiento, excepciones sanitarias e implicaciones del Convenio de Oviedo.
+          </p>
+        </article>
+
+        <!-- [EDITA AQUÍ]: Tarjeta 3 -->
+        <article class="tarjeta">
+          <div class="icono-tarjeta">🧬</div>
+          <h3>3. Reidentificación Forense</h3>
+          <p>
+            Cruce de bases de datos genealógicas públicas (GEDmatch) con perfiles anónimos. Estudio del caso real del <em>Golden State Killer</em> y precedentes criminológicos.
+          </p>
+        </article>
+
+        <!-- [EDITA AQUÍ]: Tarjeta 4 -->
+        <article class="tarjeta">
+          <div class="icono-tarjeta">🛡️</div>
+          <h3>4. Cómputo Seguro y PETs</h3>
+          <p>
+            Técnicas de preservación de privacidad: Criptografía homomórfica para procesar muestras genéticas sin descifrarlas y modelos de privacidad diferencial en biobancos.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 5: MIEMBROS DEL EQUIPO
+       ======================================================================== -->
+  <section id="equipo" class="seccion seccion-alt">
+    <div class="contenedor">
+      
+      <div class="cabecera-seccion">
+        <span class="subtitulo-seccion">Autores</span>
+        <h2 class="titulo-seccion">Miembros del Grupo</h2>
+        <p class="descripcion-seccion">
+          Integrantes del equipo de trabajo y reparto de responsabilidades del proyecto.
+        </p>
+      </div>
+
+      <div class="cuadricula-equipo">
+        
+        <!-- [EDITA AQUÍ]: Miembro 1 -->
+        <div class="tarjeta-miembro">
+          <!-- Si tienes foto real, puedes cambiar el <div> por: <img src="ruta/foto.jpg" class="avatar-miembro" style="object-fit:cover;"> -->
+          <div class="avatar-miembro">A1</div>
+          <h3 class="nombre-miembro">Nombre y Apellidos</h3>
+          <span class="rol-miembro">Bioinformática y Análisis</span>
+          <p class="desc-miembro">Encargado del estudio sobre secuenciación masiva (NGS) y formato de ficheros genéticos.</p>
+        </div>
+
+        <!-- [EDITA AQUÍ]: Miembro 2 -->
+        <div class="tarjeta-miembro">
+          <div class="avatar-miembro">A2</div>
+          <h3 class="nombre-miembro">Nombre y Apellidos</h3>
+          <span class="rol-miembro">Derecho Digital y Bioética</span>
+          <p class="desc-miembro">Responsable del marco regulatorio (RGPD Art. 9) y consentimientos informados.</p>
+        </div>
+
+        <!-- [EDITA AQUÍ]: Miembro 3 -->
+        <div class="tarjeta-miembro">
+          <div class="avatar-miembro">A3</div>
+          <h3 class="nombre-miembro">Nombre y Apellidos</h3>
+          <span class="rol-miembro">Ciberseguridad y Datos</span>
+          <p class="desc-miembro">Estudio de criptografía aplicada, cifrado homomórfico y trazabilidad de accesos.</p>
+        </div>
+
+        <!-- [EDITA AQUÍ]: Miembro 4 -->
+        <div class="tarjeta-miembro">
+          <div class="avatar-miembro">A4</div>
+          <h3 class="nombre-miembro">Nombre y Apellidos</h3>
+          <span class="rol-miembro">Coordinación y Documentación</span>
+          <p class="desc-miembro">Redacción de conclusiones, diseño de la presentación y preparación de bibliografía.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 6: RECURSOS Y BIBLIOGRAFÍA ACADÉMICA
+       ======================================================================== -->
+  <section id="bibliografia" class="seccion">
+    <div class="contenedor">
+      
+      <div class="cabecera-seccion">
+        <span class="subtitulo-seccion">Fuentes y Referencias</span>
+        <h2 class="titulo-seccion">Bibliografía Consultada</h2>
+        <p class="descripcion-seccion">
+          Artículos científicos, directivas legales y convenios utilizados para elaborar el trabajo.
+        </p>
+      </div>
+
+      <!-- [EDITA AQUÍ]: Añade o modifica los libros/artículos que habéis consultado -->
+      <ul class="lista-recursos">
+        
+        <li class="item-recurso">
+          <span class="num-recurso">[01]</span>
+          <div class="texto-recurso">
+            <strong>Unión Europea (2016):</strong> <em>Reglamento (UE) 2016/679 (RGPD)</em>. Especial referencia al Artículo 4.13 (Definición de datos genéticos) y Artículo 9 (Tratamiento de categorías especiales de datos personales).
+          </div>
+        </li>
+
+        <li class="item-recurso">
+          <span class="num-recurso">[02]</span>
+          <div class="texto-recurso">
+            <strong>Consejo de Europa (1997):</strong> <em>Convenio para la protección de los derechos humanos y la dignidad del ser humano con respecto a las aplicaciones de la Biología y la Medicina (Convenio de Oviedo)</em>.
+          </div>
+        </li>
+
+        <li class="item-recurso">
+          <span class="num-recurso">[03]</span>
+          <div class="texto-recurso">
+            <strong>Gymrek, M., et al. (2013):</strong> <em>«Identifying Personal Genomes by Surname Inference»</em>. Revista Science, 339(6117), pp. 321-324. Estudio sobre la reversibilidad del anonimato genómico.
+          </div>
+        </li>
+
+        <li class="item-recurso">
+          <span class="num-recurso">[04]</span>
+          <div class="texto-recurso">
+            <strong>UNESCO (1997):</strong> <em>Declaración Universal sobre el Genoma Humano y los Derechos Humanos</em>. Artículos relativos a la confidencialidad y la no discriminación genética.
+          </div>
+        </li>
+
+      </ul>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       SECCIÓN 7: PIE DE PÁGINA
+       ======================================================================== -->
+  <footer class="pie-pagina">
+    <div class="contenedor pie-contenido">
+      
+      <!-- [EDITA AQUÍ]: Información de vuestra universidad o centro de estudios -->
+      <div>
+        <strong>Proyecto GenoSafe</strong> • Trabajo Académico de Investigación
+        <p style="margin-top: 0.25rem;">Facultad / Asignatura • Conforme a estándares de bioética</p>
+      </div>
+
+      <!-- [EDITA AQUÍ]: Licencia o año -->
+      <div>
+        Diseñado por el equipo de trabajo • 2026
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       SCRIPT: CAMBIO DINÁMICO DE PALETA DE COLORES
+       ======================================================================== -->
+  <script>
+    /**
+     * Permite alternar la paleta de colores para que el alumno pueda
+     * previsualizar cómo luce su página con distintas combinaciones.
+     */
+    function cambiarTema(nombreTema) {
+      if (nombreTema === 'teal') {
+        document.documentElement.removeAttribute('data-tema');
+      } else {
+        document.documentElement.setAttribute('data-tema', nombreTema);
+      }
+    }
+  </script>
+
+</body>
+</html>
