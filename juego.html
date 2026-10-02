@@ -1416,6 +1416,8 @@
 
     function loadDilemma(index) {
       const d = DILEMMAS[index];
+      d.choices.sort(() => Math.random() - 0.5);
+      
       document.getElementById('quest-phase').textContent = d.phase;
       document.getElementById('quest-cat').textContent = d.category;
       document.getElementById('quest-speaker-name').textContent = d.speakerName;
