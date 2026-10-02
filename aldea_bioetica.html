@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>GenoSafe: Aventura Bioética Avanzada</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
   <style>
@@ -10,61 +10,72 @@
       --bg: #f4efe6; --wood: #3e2e28; --parchment: #faf6eb;
       --sage: #58795c; --terra: #c06346; --amber: #d48f38;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
-    body { background: var(--bg); font-family: 'Nunito', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-touch-callout: none; }
+    body { background: var(--bg); font-family: 'Nunito', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 10px; overflow-x: hidden; touch-action: pan-y; }
     h1 { font-family: 'Lora', serif; color: var(--wood); font-size: 1.5rem; margin-bottom: 5px; text-align: center; }
     
     /* Contenedor del juego */
-    #game-wrapper { position: relative; width: 100%; max-width: 700px; height: 500px; border: 6px solid var(--wood); border-radius: 16px; overflow: hidden; background: #8cb67c; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-    canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+    #game-wrapper { position: relative; width: 100%; max-width: 700px; height: 50vh; min-height: 300px; max-height: 500px; border: 4px solid var(--wood); border-radius: 12px; overflow: hidden; background: #8cb67c; box-shadow: 0 5px 15px rgba(0,0,0,0.15); touch-action: none; }
+    canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; object-fit: cover; }
     
     /* HUD Superior */
-    #hud { position: absolute; top: 10px; left: 10px; right: 10px; background: rgba(250,246,235,0.9); border: 2px solid var(--wood); border-radius: 12px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; z-index: 5; font-size: 0.9rem; }
-    .seal-container { display: flex; gap: 4px; }
-    .seal { width: 24px; height: 24px; border-radius: 50%; background: #ddd; border: 1px dashed #777; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+    #hud { position: absolute; top: 8px; left: 8px; right: 8px; background: rgba(250,246,235,0.95); border: 2px solid var(--wood); border-radius: 8px; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; z-index: 5; font-size: 0.8rem; }
+    .seal-container { display: flex; gap: 3px; }
+    .seal { width: 20px; height: 20px; border-radius: 50%; background: #ddd; border: 1px dashed #777; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
     .seal.done { background: var(--terra); color: white; border: 2px solid white; font-weight: 800; }
-    #map-name { color: var(--sage); }
+    #map-name { color: var(--sage); display: none; } /* Oculto en móvil por espacio */
+    @media (min-width: 480px) { #map-name { display: inline; } .seal { width: 24px; height: 24px; font-size: 0.75rem; } #hud { font-size: 0.9rem; } }
 
     /* Creador de Personaje */
-    #creator-screen { position: absolute; inset: 0; background: var(--bg); z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-    .creator-box { background: white; padding: 20px; border-radius: 16px; border: 3px solid var(--wood); width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
-    .input-name { width: 100%; padding: 10px; margin-bottom: 15px; border: 2px solid #ccc; border-radius: 8px; font-family: inherit; font-weight: bold; font-size: 1rem; text-align: center; }
+    #creator-screen { position: absolute; inset: 0; background: var(--bg); z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; text-align: center; overflow-y: auto; }
+    .creator-box { background: white; padding: 15px; border-radius: 12px; border: 3px solid var(--wood); width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
+    .input-name { width: 100%; padding: 10px; margin-bottom: 10px; border: 2px solid #ccc; border-radius: 8px; font-family: inherit; font-weight: bold; font-size: 1rem; text-align: center; }
     
-    /* Preview Canvas Creador */
-    .preview-container { background: #eaf1e8; border: 2px dashed #9cae9b; border-radius: 12px; padding: 10px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; width: 120px; height: 120px; }
+    .preview-container { background: #eaf1e8; border: 2px dashed #9cae9b; border-radius: 12px; padding: 5px; margin-bottom: 10px; display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; }
     
-    .options-row { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; width: 100%; }
-    .opt-btn { flex: 1; padding: 8px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: #f9f9f9; font-size: 0.9rem; }
+    .options-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; width: 100%; }
+    .opt-btn { flex: 1; padding: 6px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; font-weight: bold; background: #f9f9f9; font-size: 0.85rem; }
     .opt-btn.active { border-color: var(--sage); background: #e5ece4; color: var(--wood); }
-    .color-swatch { width: 34px; height: 34px; border-radius: 50%; display: inline-block; cursor: pointer; border: 3px solid transparent; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .color-swatch { width: 30px; height: 30px; border-radius: 50%; display: inline-block; cursor: pointer; border: 3px solid transparent; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .color-swatch.active { border-color: var(--wood); transform: scale(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-    .start-btn { background: var(--terra); color: white; border: none; padding: 12px 20px; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
+    .start-btn { background: var(--terra); color: white; border: none; padding: 12px 15px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 5px; }
 
     /* Pantalla Victoria Final */
-    #victory-screen { display: none; position: absolute; inset: 0; background: rgba(244, 239, 230, 0.95); z-index: 30; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; animation: fadeIn 0.5s ease; }
-    .victory-box { background: white; padding: 30px; border-radius: 16px; border: 4px solid var(--sage); box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 400px; }
-    .victory-title { font-family: 'Lora', serif; color: var(--sage); font-size: 1.8rem; margin-bottom: 10px; }
-    .victory-text { font-size: 1rem; color: #555; margin-bottom: 20px; line-height: 1.5; }
-    .vic-btn { display: block; width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; font-weight: bold; font-size: 1rem; cursor: pointer; text-decoration: none; text-align: center; font-family: 'Nunito', sans-serif; }
+    #victory-screen { display: none; position: absolute; inset: 0; background: rgba(244, 239, 230, 0.95); z-index: 30; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; animation: fadeIn 0.5s ease; }
+    .victory-box { background: white; padding: 25px; border-radius: 16px; border: 4px solid var(--sage); box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 90%; }
+    .victory-title { font-family: 'Lora', serif; color: var(--sage); font-size: 1.5rem; margin-bottom: 10px; }
+    .victory-text { font-size: 0.9rem; color: #555; margin-bottom: 20px; line-height: 1.4; }
+    .vic-btn { display: block; width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 10px; font-weight: bold; font-size: 1rem; cursor: pointer; text-decoration: none; text-align: center; font-family: 'Nunito', sans-serif; box-sizing: border-box; }
     .btn-replay { background: var(--wood); color: white; border: none; }
     .btn-web { background: white; color: var(--terra); border: 2px solid var(--terra); }
 
     /* Diálogos */
-    #dialogue-box { display: none; position: absolute; bottom: 10px; left: 10px; right: 10px; background: var(--parchment); border: 3px solid var(--wood); border-radius: 12px; padding: 15px; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: popUp 0.2s ease; }
+    #dialogue-box { display: none; position: absolute; bottom: 5px; left: 5px; right: 5px; background: var(--parchment); border: 3px solid var(--wood); border-radius: 12px; padding: 12px; z-index: 10; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: popUp 0.2s ease; max-height: 90%; overflow-y: auto; }
     @keyframes popUp { from{ transform:translateY(10px); opacity:0;} to{transform:translateY(0);opacity:1;} }
     @keyframes fadeIn { from{ opacity:0;} to{opacity:1;} }
-    .npc-header { font-weight: bold; color: var(--terra); margin-bottom: 5px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
-    #dialogue-text { font-family: 'Lora', serif; font-size: 0.95rem; margin-bottom: 10px; line-height: 1.4; color: #222; }
-    .choice-btn { display: block; width: 100%; text-align: left; background: white; border: 2px solid #ddd; padding: 10px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: bold; font-size: 0.85rem; color: var(--wood); }
-    .choice-btn:hover { background: #f0f0f0; border-color: var(--wood); }
+    .npc-header { font-weight: bold; color: var(--terra); margin-bottom: 5px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; font-size: 0.9rem; }
+    #dialogue-text { font-family: 'Lora', serif; font-size: 0.9rem; margin-bottom: 10px; line-height: 1.3; color: #222; }
+    .choice-btn { display: block; width: 100%; text-align: left; background: white; border: 2px solid #ddd; padding: 10px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; font-family: 'Nunito', sans-serif; font-weight: bold; font-size: 0.8rem; color: var(--wood); touch-action: manipulation; }
+    .choice-btn:active { background: #f0f0f0; border-color: var(--wood); }
 
-    /* Controles Táctiles */
-    .controls { display: none; margin-top: 10px; gap: 20px; width: 100%; max-width: 400px; justify-content: center; }
-    @media (max-width: 768px) { .controls { display: flex; } #game-wrapper { height: 380px; } }
-    .dpad { display: grid; grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(3, 44px); gap: 5px; }
-    .btn { background: #e4dacb; border: 2px solid var(--wood); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; cursor: pointer; }
-    .btn:active { background: #d0c3af; }
-    .btn-act { width: 64px; height: 64px; border-radius: 50%; background: var(--terra); color: white; }
+    /* Controles Táctiles Optimizados */
+    .controls { display: flex; margin-top: 15px; width: 100%; max-width: 500px; justify-content: space-between; align-items: center; padding: 0 10px; }
+    .dpad { display: grid; grid-template-columns: repeat(3, 50px); grid-template-rows: repeat(3, 50px); gap: 6px; touch-action: none; }
+    .btn { background: #e4dacb; border: 2px solid var(--wood); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; color: var(--wood); touch-action: none; user-select: none; }
+    .btn:active, .btn.pressed { background: #c5b49b; transform: scale(0.95); }
+    
+    .action-container { display: flex; justify-content: center; align-items: center; width: 80px; height: 100%; }
+    .btn-act { width: 70px; height: 70px; border-radius: 50%; background: var(--terra); color: white; border: 3px solid var(--wood); box-shadow: 0 4px 0 var(--wood); font-size: 2rem; display: flex; justify-content: center; align-items: center; touch-action: none; }
+    .btn-act:active { transform: translateY(4px); box-shadow: 0 0 0 var(--wood); }
+
+    @media (min-width: 769px) {
+      /* Estilos para PC */
+      #game-wrapper { height: 500px; }
+      .controls { display: none; }
+      #dialogue-text { font-size: 0.95rem; }
+      .choice-btn { font-size: 0.85rem; }
+      .choice-btn:hover { background: #f0f0f0; border-color: var(--wood); }
+    }
   </style>
 </head>
 <body>
@@ -75,7 +86,7 @@
     <!-- Creador de Personaje -->
     <div id="creator-screen">
       <div class="creator-box">
-        <h2 style="margin-bottom:10px; font-family:'Lora',serif; color:var(--wood);">Tu Custodio Genético</h2>
+        <h2 style="margin-bottom:10px; font-family:'Lora',serif; color:var(--wood); font-size: 1.2rem;">Tu Custodio Genético</h2>
         
         <div class="preview-container">
           <canvas id="preview-canvas" width="80" height="80"></canvas>
@@ -88,18 +99,18 @@
           <div class="opt-btn" onclick="setOpt('gender', 'male', this)">Masculino</div>
         </div>
 
-        <p style="font-size:0.85rem; font-weight:bold; margin-bottom:5px; align-self:flex-start;">Color de Pelo:</p>
+        <p style="font-size:0.8rem; font-weight:bold; margin-bottom:5px; align-self:flex-start;">Color de Pelo:</p>
         <div class="options-row">
-          <div class="color-swatch active" style="background:#4a3018;" onclick="setOpt('hair', '#4a3018', this)"></div> <!-- Castaño -->
-          <div class="color-swatch" style="background:#d4af37;" onclick="setOpt('hair', '#d4af37', this)"></div> <!-- Rubio -->
-          <div class="color-swatch" style="background:#222;" onclick="setOpt('hair', '#222', this)"></div> <!-- Negro -->
+          <div class="color-swatch active" style="background:#4a3018;" onclick="setOpt('hair', '#4a3018', this)"></div>
+          <div class="color-swatch" style="background:#d4af37;" onclick="setOpt('hair', '#d4af37', this)"></div>
+          <div class="color-swatch" style="background:#222;" onclick="setOpt('hair', '#222', this)"></div>
         </div>
 
-        <p style="font-size:0.85rem; font-weight:bold; margin-bottom:5px; align-self:flex-start;">Ropa:</p>
+        <p style="font-size:0.8rem; font-weight:bold; margin-bottom:5px; align-self:flex-start;">Ropa:</p>
         <div class="options-row">
-          <div class="color-swatch active" style="background:#58795c;" onclick="setOpt('clothes', '#58795c', this)"></div> <!-- Verde -->
-          <div class="color-swatch" style="background:#3a6080;" onclick="setOpt('clothes', '#3a6080', this)"></div> <!-- Azul -->
-          <div class="color-swatch" style="background:#b3504b;" onclick="setOpt('clothes', '#b3504b', this)"></div> <!-- Rojo -->
+          <div class="color-swatch active" style="background:#58795c;" onclick="setOpt('clothes', '#58795c', this)"></div>
+          <div class="color-swatch" style="background:#3a6080;" onclick="setOpt('clothes', '#3a6080', this)"></div>
+          <div class="color-swatch" style="background:#b3504b;" onclick="setOpt('clothes', '#b3504b', this)"></div>
         </div>
 
         <button class="start-btn" onclick="startGame()">Entrar a la Aldea 🌿</button>
@@ -108,13 +119,14 @@
 
     <!-- HUD -->
     <div id="hud" style="display:none;">
-      <div>📝 <span id="hud-name">Nombre</span> | <span id="map-name">Plaza Central</span></div>
+      <div>📝 <span id="hud-name">Nombre</span> <span id="map-name">| Plaza Central</span></div>
       <div class="seal-container">
         <div class="seal" id="s0">1</div><div class="seal" id="s1">2</div><div class="seal" id="s2">3</div>
         <div class="seal" id="s3">4</div><div class="seal" id="s4">5</div><div class="seal" id="s5">6</div>
       </div>
     </div>
 
+    <!-- Resolución fija interna del canvas, se estira con CSS -->
     <canvas id="canvas" width="700" height="500"></canvas>
 
     <!-- Diálogos -->
@@ -127,9 +139,9 @@
     <!-- Pantalla Victoria -->
     <div id="victory-screen">
       <div class="victory-box">
-        <div style="font-size: 3rem; margin-bottom:10px;">🏆</div>
+        <div style="font-size: 2.5rem; margin-bottom:10px;">🏆</div>
         <h2 class="victory-title">¡Misión Cumplida!</h2>
-        <p class="victory-text">Has ayudado a los vecinos de la aldea a comprender sus derechos bioéticos y has protegido la confidencialidad de la información genética de todos.</p>
+        <p class="victory-text">Has ayudado a los vecinos a comprender sus derechos bioéticos y protegido la información genética.</p>
         <button class="vic-btn btn-replay" onclick="location.reload()">Jugar de nuevo</button>
         <a href="index.html" class="vic-btn btn-web">Volver a GenoSafe</a>
       </div>
@@ -137,26 +149,35 @@
 
   </div>
 
+  <!-- Controles Táctiles para Móvil -->
   <div class="controls">
     <div class="dpad">
       <div></div><div class="btn" id="btn-up">▲</div><div></div>
       <div class="btn" id="btn-left">◄</div><div class="btn" id="btn-down">▼</div><div class="btn" id="btn-right">►</div>
     </div>
-    <div class="btn btn-act" id="btn-act">💬</div>
+    <div class="action-container">
+        <div class="btn-act" id="btn-act">💬</div>
+    </div>
   </div>
 
 <script>
+  // Prevención de scroll en botones táctiles
+  document.addEventListener('touchmove', function(e) {
+    if (e.target.closest('.dpad') || e.target.closest('.btn-act')) {
+        e.preventDefault();
+    }
+  }, { passive: false });
+
   // --- CONFIGURACIÓN DE PERSONAJE ---
   const player = { x: 350, y: 250, size: 24, speed: 4, name: 'Guardián', gender: 'female', hair: '#4a3018', clothes: '#58795c', step: 0, dir: 'down' };
   
-  // Preview Canvas para el creador
   const previewCanvas = document.getElementById('preview-canvas');
   const pctx = previewCanvas.getContext('2d');
 
   function updatePreview() {
     pctx.clearRect(0, 0, 80, 80);
     pctx.save();
-    pctx.scale(2, 2); // Dibujamos el personaje más grande en la preview
+    pctx.scale(2, 2); 
     drawCharacterRaw(pctx, 20, 20, player.gender, player.hair, player.clothes, 0, 'down');
     pctx.restore();
   }
@@ -169,7 +190,6 @@
     updatePreview();
   }
 
-  // Inicializar preview al cargar
   window.onload = updatePreview;
 
   function startGame() {
@@ -182,7 +202,7 @@
     requestAnimationFrame(gameLoop);
   }
 
-  // --- DATOS DEL JUEGO (Mapas, Edificios, Decorados y NPCs) ---
+  // --- DATOS DEL JUEGO ---
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let gameActive = false, inDialog = false;
@@ -197,89 +217,64 @@
         { t: 'Callarse. Tiene el "derecho a no saber" descubrimientos no tratables.', ok: true, f: '¡Exacto! El derecho a no saber es fundamental en genética clínica y debo respetarlo.' },
         { t: 'Cuéntaselo todo, el médico manda.', ok: false, f: '¡Error! Vulneraría su autonomía y el derecho legal a no saber del paciente.' }
       ]},
-    { id:1, map:'comercial', name:'Clara', role:'Adicta a las compras', avatar:'🛍️', x: 250, y: 350, hair: '#d4af37', clothes: '#ff99cc',
+    { id:1, map:'comercial', name:'Clara', role:'Adicta a las compras', avatar:'🛍️️', x: 250, y: 350, hair: '#d4af37', clothes: '#ff99cc',
       text: '¡Iba a escupir en este tubo para mandarlo a una app de internet y saber si desciendo de vikingos! Pero, ¿qué pasa con mi saliva si la empresa quiebra mañana?',
       opts: [
         { t: 'Si no lees la letra pequeña, pueden vender tus datos o guardarlos fuera de Europa.', ok: true, f: '¡Qué miedo! Tienes razón, a veces las apps comerciales no cumplen la estricta protección médica europea.' },
-        { t: 'Tranquila, se destruye automáticamente por arte de magia.', ok: false, f: '¡Falso! Muchas empresas se reservan el derecho a transferir esos activos a terceros.' }
+        { t: 'Tranquila, se destruye automáticamente.', ok: false, f: '¡Falso! Muchas empresas se reservan el derecho a transferir esos activos a terceros.' }
       ]},
     { id:2, map:'comercial', name:'Rodrigo', role:'Agente de Seguros', avatar:'💼', x: 500, y: 220, hair: '#222', clothes: '#333',
-      text: '¡Vaya negocio! Quiero pedirle el ADN a todos mis clientes para cobrarles más cara la hipoteca si tienen genes "defectuosos". ¿A que es una idea brillante?',
+      text: 'Quiero pedirle el ADN a todos mis clientes para cobrarles más cara la hipoteca si tienen genes "defectuosos". ¿A que es una idea brillante?',
       opts: [
-        { t: 'Brillante y prohibido. El RGPD y Oviedo impiden la discriminación genética en seguros.', ok: true, f: '¡Uf, menos mal que me avisas! No quiero perder mi licencia por discriminar genéticamente.' },
+        { t: 'Brillante y prohibido. La ley impide la discriminación genética en seguros.', ok: true, f: '¡Uf, menos mal que me avisas! No quiero perder mi licencia por discriminar genéticamente.' },
         { t: 'Sí, la aseguradora tiene derecho a conocer el riesgo.', ok: false, f: '¡No! Eso atenta contra los derechos humanos y está prohibido por ley expresamente.' }
       ]},
     { id:3, map:'medica', name:'Dra. Elvira', role:'Directora de Biobanco', avatar:'🔬', x: 550, y: 200, hair: '#663300', clothes: '#99ccff',
-      text: 'Tengo congeladas mil muestras de un estudio de diabetes de hace años. ¿Las meto a la batidora para investigar la calvicie sin avisar a los donantes? Total, ya están aquí...',
+      text: 'Tengo congeladas mil muestras de un estudio de diabetes. ¿Las meto a la batidora para investigar la calvicie sin avisar a los donantes?',
       opts: [
-        { t: 'Depende. Necesitas su consentimiento específico o uno amplio regulado por ley.', ok: true, f: '¡Cierto! La Ley de Investigación Biomédica exige trazabilidad y respetar el límite del consentimiento inicial.' },
-        { t: 'Claro, la muestra donada al hospital ya es tuya para siempre.', ok: false, f: '¡Incorrecto! El paciente conserva derechos sobre el alcance de su donación.' }
+        { t: 'Depende. Necesitas su consentimiento específico o uno amplio regulado.', ok: true, f: '¡Cierto! La Ley de Investigación Biomédica exige trazabilidad y respetar el límite del consentimiento inicial.' },
+        { t: 'Claro, la muestra donada al hospital ya es tuya.', ok: false, f: '¡Incorrecto! El paciente conserva derechos sobre el alcance de su donación.' }
       ]},
     { id:4, map:'plaza', name:'Marta', role:'Recursos Humanos', avatar:'📊', x: 180, y: 320, hair: '#cc0000', clothes: '#555',
-      text: '¡Hola! Para el nuevo puesto de oficina quiero contratar solo a empleados que no se resfríen nunca. ¿Puedo pedirles un test de ADN secreto en el examen médico de empresa?',
+      text: 'Para el nuevo puesto quiero contratar solo a empleados que no se resfríen. ¿Puedo pedirles un test de ADN secreto en el examen médico?',
       opts: [
-        { t: '¡Ni se te ocurra! La ley prohíbe el cribado genético laboral para evitar discriminación.', ok: true, f: 'Vaya, tendré que conformarme con mirar su currículum. ¡Gracias por el aviso legal!' },
-        { t: 'Sí, pero solo si la empresa paga el test.', ok: false, f: '¡Falso! La legislación laboral lo prohíbe para proteger la privacidad del trabajador en la UE.' }
+        { t: '¡Ni se te ocurra! La ley prohíbe el cribado genético laboral.', ok: true, f: 'Vaya, tendré que conformarme con mirar su currículum. ¡Gracias por el aviso legal!' },
+        { t: 'Sí, pero solo si la empresa paga el test.', ok: false, f: '¡Falso! La legislación laboral lo prohíbe para proteger la privacidad del trabajador.' }
       ]},
     { id:5, map:'plaza', name:'Primo Leo', role:'Familiar Lejano', avatar:'🧢', x: 520, y: 150, hair: '#4a3018', clothes: '#ff9900',
-      text: '¡Mira! He subido todo mi mapa genético con mi nombre real a un foro público de genealogía para encontrar primos. A ti no te afecta porque eres tú y yo soy yo, ¿verdad?',
+      text: 'He subido mi mapa genético con mi nombre a un foro público para encontrar primos. A ti no te afecta porque eres tú y yo soy yo, ¿verdad?',
       opts: [
-        { t: '¡Claro que me afecta! Compartimos ADN, y pueden reidentificarnos cruzando datos.', ok: true, f: '¡Ostras! No había pensado que mi intimidad genética también es la tuya. Iré a borrarlo ahora mismo.' },
+        { t: '¡Claro que me afecta! Compartimos ADN, pueden reidentificarnos.', ok: true, f: '¡Ostras! No había pensado que mi intimidad genética también es la tuya. Iré a borrarlo.' },
         { t: 'No me afecta, es tu cuerpo y son tus datos.', ok: false, f: '¡Error! La información genética tiene impacto familiar y expone a toda la familia biológica.' }
       ]}
   ];
 
   const mapsData = {
-    plaza: { 
-      name: 'Plaza Central', bg: '#a3c9a6',
-      buildings: [
-        { x: 120, y: 50, w: 120, h: 90, c: '#e6dac3', roof: '#8c7b65', lbl: 'Oficinas 🏢' },
-        { x: 450, y: 10, w: 140, h: 100, c: '#c2d1b8', roof: '#507555', lbl: 'Parque Público 🌲' }
-      ],
-      decor: [
-        { t:'fountain', x:350, y:250 }, { t:'bench', x:280, y:250 }, { t:'bench', x:420, y:250 },
-        { t:'lamp', x:350, y:180 }, { t:'flower', x:300, y:210 }, { t:'flower', x:400, y:210 },
-        { t:'tree', x:50, y:100 }, { t:'tree', x:650, y:100 }, { t:'tree', x:50, y:400 }
-      ],
+    plaza: { name: 'Plaza Central', bg: '#a3c9a6',
+      buildings: [ { x: 120, y: 50, w: 120, h: 90, c: '#e6dac3', roof: '#8c7b65', lbl: 'Oficinas 🏢' }, { x: 450, y: 10, w: 140, h: 100, c: '#c2d1b8', roof: '#507555', lbl: 'Parque 🌲' } ],
+      decor: [ { t:'fountain', x:350, y:250 }, { t:'bench', x:280, y:250 }, { t:'bench', x:420, y:250 }, { t:'lamp', x:350, y:180 }, { t:'flower', x:300, y:210 }, { t:'flower', x:400, y:210 }, { t:'tree', x:50, y:100 }, { t:'tree', x:650, y:100 }, { t:'tree', x:50, y:400 } ],
       exits: { left: 'medica', right: 'comercial' }
     },
-    medica: { 
-      name: 'Distrito Médico', bg: '#b2c8c4',
-      buildings: [
-        { x: 150, y: 60, w: 110, h: 90, c: '#f0f4f8', roof: '#5f849c', lbl: 'Clínica 🏥' },
-        { x: 450, y: 60, w: 130, h: 90, c: '#e9ecef', roof: '#476953', lbl: 'Biobanco 🧬' }
-      ],
-      decor: [
-        { t:'lamp', x:350, y:150 }, { t:'lamp', x:350, y:350 }, { t:'tree', x:80, y:250 },
-        { t:'flower', x:200, y:180 }, { t:'flower', x:500, y:180 }, { t:'bench', x:350, y:250 }
-      ],
+    medica: { name: 'Distrito Médico', bg: '#b2c8c4',
+      buildings: [ { x: 150, y: 60, w: 110, h: 90, c: '#f0f4f8', roof: '#5f849c', lbl: 'Clínica 🏥' }, { x: 450, y: 60, w: 130, h: 90, c: '#e9ecef', roof: '#476953', lbl: 'Biobanco 🧬' } ],
+      decor: [ { t:'lamp', x:350, y:150 }, { t:'lamp', x:350, y:350 }, { t:'tree', x:80, y:250 }, { t:'flower', x:200, y:180 }, { t:'flower', x:500, y:180 }, { t:'bench', x:350, y:250 } ],
       exits: { right: 'plaza' }
     },
-    comercial: { 
-      name: 'Distrito Comercial', bg: '#d4c8b8',
-      buildings: [
-        { x: 180, y: 50, w: 120, h: 90, c: '#f3e6d8', roof: '#c46b5a', lbl: 'Correos ✉️' },
-        { x: 450, y: 50, w: 120, h: 90, c: '#dcdcdc', roof: '#444', lbl: 'Seguros ⚖️' }
-      ],
-      decor: [
-        { t:'lamp', x:350, y:150 }, { t:'bench', x:220, y:180 }, { t:'bench', x:490, y:180 },
-        { t:'flower', x:260, y:400 }, { t:'tree', x:100, y:300 }, { t:'tree', x:600, y:300 }
-      ],
+    comercial: { name: 'Distrito Comercial', bg: '#d4c8b8',
+      buildings: [ { x: 180, y: 50, w: 120, h: 90, c: '#f3e6d8', roof: '#c46b5a', lbl: 'Correos ✉️' }, { x: 450, y: 50, w: 120, h: 90, c: '#dcdcdc', roof: '#444', lbl: 'Seguros ⚖️' } ],
+      decor: [ { t:'lamp', x:350, y:150 }, { t:'bench', x:220, y:180 }, { t:'bench', x:490, y:180 }, { t:'flower', x:260, y:400 }, { t:'tree', x:100, y:300 }, { t:'tree', x:600, y:300 } ],
       exits: { left: 'plaza' }
     }
   };
 
-  // --- LÓGICA DE DIBUJO ---
   function drawEnv() {
     let m = mapsData[currentMap];
     ctx.fillStyle = m.bg; ctx.fillRect(0,0,700,500);
 
-    // Caminos
     ctx.fillStyle = 'rgba(255,255,255,0.15)';
     ctx.fillRect(0, 200, 700, 100);
     ctx.fillRect(300, 0, 100, 500);
     
-    // Edificios
     m.buildings.forEach(b => {
       ctx.fillStyle = b.c; ctx.fillRect(b.x, b.y, b.w, b.h);
       ctx.fillStyle = b.roof; ctx.beginPath(); ctx.moveTo(b.x-10, b.y); ctx.lineTo(b.x+b.w/2, b.y-30); ctx.lineTo(b.x+b.w+10, b.y); ctx.fill();
@@ -287,7 +282,6 @@
       ctx.fillStyle = '#fff'; ctx.font = 'bold 12px Nunito'; ctx.textAlign = 'center'; ctx.fillText(b.lbl, b.x+b.w/2, b.y-10);
     });
 
-    // Decorados
     m.decor.forEach(d => {
       if(d.t==='tree') { ctx.fillStyle='#5c4033'; ctx.fillRect(d.x-4, d.y, 8, 15); ctx.fillStyle='#4caf50'; ctx.beginPath(); ctx.arc(d.x, d.y-10, 18, 0, Math.PI*2); ctx.fill(); }
       if(d.t==='bench') { ctx.fillStyle='#8b5a2b'; ctx.fillRect(d.x-15, d.y, 30, 10); ctx.fillStyle='#a0522d'; ctx.fillRect(d.x-15, d.y-8, 30, 8); }
@@ -296,30 +290,23 @@
       if(d.t==='fountain') { ctx.fillStyle='#bdc3c7'; ctx.beginPath(); ctx.arc(d.x, d.y, 25, 0, Math.PI*2); ctx.fill(); ctx.fillStyle='#3498db'; ctx.beginPath(); ctx.arc(d.x, d.y, 18, 0, Math.PI*2); ctx.fill(); }
     });
 
-    // Flechas salidas
     ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.font = '30px sans-serif';
     if(m.exits.left) ctx.fillText('⬅️', 20, 250);
     if(m.exits.right) ctx.fillText('➡️', 680, 250);
   }
 
-  // Función aislada para dibujar un personaje (usada en canvas y en preview)
   function drawCharacterRaw(targetContext, x, y, gender, hairColor, clothColor, step, dir) {
     targetContext.save(); targetContext.translate(x, y);
     const bob = step % 20 > 10 ? 2 : 0;
     
-    // Sombra
     targetContext.fillStyle = 'rgba(0,0,0,0.2)'; targetContext.beginPath(); targetContext.ellipse(0, 12, 10, 4, 0, 0, Math.PI*2); targetContext.fill();
-    // Cuerpo
     targetContext.fillStyle = clothColor;
     if(gender === 'female') { targetContext.beginPath(); targetContext.moveTo(-8, -2+bob); targetContext.lineTo(8, -2+bob); targetContext.lineTo(10, 10+bob); targetContext.lineTo(-10, 10+bob); targetContext.fill(); } 
     else { targetContext.fillRect(-7, -2+bob, 14, 12); targetContext.fillStyle='#333'; targetContext.fillRect(-6, 10+bob, 4, 4); targetContext.fillRect(2, 10+bob, 4, 4); }
-    // Cabeza
     targetContext.fillStyle = '#f5d0b5'; targetContext.beginPath(); targetContext.arc(0, -12+bob, 9, 0, Math.PI*2); targetContext.fill();
-    // Pelo
     targetContext.fillStyle = hairColor; 
     if(gender === 'female') { targetContext.beginPath(); targetContext.arc(0, -14+bob, 10, Math.PI, Math.PI*2.2); targetContext.fill(); targetContext.beginPath(); targetContext.arc(8, -12+bob, 5, 0, Math.PI*2); targetContext.fill(); } 
     else { targetContext.beginPath(); targetContext.arc(0, -15+bob, 9, Math.PI*0.8, Math.PI*2.2); targetContext.fill(); }
-    // Ojos
     targetContext.fillStyle = '#000';
     if(dir === 'left') { targetContext.fillRect(-6, -13+bob, 2, 2); }
     else if(dir === 'right') { targetContext.fillRect(4, -13+bob, 2, 2); }
@@ -328,7 +315,7 @@
     targetContext.restore();
   }
 
-  function drawCharacter(x, y, gender, hairColor, clothColor, step, dir, isNPC=false, name="NPC") {
+  function drawCharacter(x, y, gender, hairColor, clothColor, step, dir, isNPC=false) {
     drawCharacterRaw(ctx, x, y, gender, hairColor, clothColor, step, dir);
     if(!isNPC) { 
       ctx.fillStyle='#fff'; ctx.font='bold 11px Nunito'; ctx.textAlign='center'; 
@@ -341,18 +328,16 @@
   function drawNPCs() {
     allNPCs.filter(n => n.map === currentMap).forEach(n => {
       drawCharacter(n.x, n.y, n.id%2===0?'male':'female', n.hair, n.clothes, 0, 'down', true);
-      // Misión completada indicator
-      if(missionsDone[n.id]) { ctx.fillStyle='var(--sage)'; ctx.font='12px sans-serif'; ctx.fillText('✅', n.x, n.y-25); }
-      else { ctx.fillStyle='#fff'; ctx.font='12px sans-serif'; ctx.fillText('💬', n.x, n.y-25); }
+      if(missionsDone[n.id]) { ctx.fillStyle='var(--sage)'; ctx.font='14px sans-serif'; ctx.fillText('✅', n.x, n.y-25); }
+      else { ctx.fillStyle='#fff'; ctx.font='14px sans-serif'; ctx.fillText('💬', n.x, n.y-25); }
     });
   }
 
-  // --- LÓGICA DE MOVIMIENTO E INTERACCIÓN ---
   function changeMap(dir) {
     let m = mapsData[currentMap];
     if(dir === 'left' && m.exits.left) { currentMap = m.exits.left; player.x = 650; }
     if(dir === 'right' && m.exits.right) { currentMap = m.exits.right; player.x = 50; }
-    document.getElementById('map-name').innerText = mapsData[currentMap].name;
+    document.getElementById('map-name').innerText = '| ' + mapsData[currentMap].name;
   }
 
   function checkInteraction() {
@@ -372,7 +357,7 @@
     let choicesBox = document.getElementById('d-choices');
     choicesBox.innerHTML = '';
     
-    let opts = [...n.opts].sort(() => Math.random() - 0.5); // Barajar opciones
+    let opts = [...n.opts].sort(() => Math.random() - 0.5); 
     opts.forEach(opt => {
       let b = document.createElement('button'); b.className = 'choice-btn'; b.innerText = opt.t;
       b.onclick = () => {
@@ -406,20 +391,26 @@
     }
   }
 
-  // Controles
+  // Keyboard controls
   window.onkeydown = e => { if(e.key=='w'||e.key=='ArrowUp') keys.w=1; if(e.key=='s'||e.key=='ArrowDown') keys.s=1; if(e.key=='a'||e.key=='ArrowLeft') keys.a=1; if(e.key=='d'||e.key=='ArrowRight') keys.d=1; if(e.key==' ' && !inDialog) checkInteraction(); };
   window.onkeyup = e => { if(e.key=='w'||e.key=='ArrowUp') keys.w=0; if(e.key=='s'||e.key=='ArrowDown') keys.s=0; if(e.key=='a'||e.key=='ArrowLeft') keys.a=0; if(e.key=='d'||e.key=='ArrowRight') keys.d=0; };
   
-  // Táctil
-  const bindT = (id, k) => { document.getElementById(id).ontouchstart = e => { e.preventDefault(); keys[k]=1; }; document.getElementById(id).ontouchend = e => { e.preventDefault(); keys[k]=0; }; };
-  bindT('btn-up','w'); bindT('btn-down','s'); bindT('btn-left','a'); bindT('btn-right','d');
-  document.getElementById('btn-act').ontouchstart = e => { e.preventDefault(); if(!inDialog) checkInteraction(); };
-  document.getElementById('btn-act').onclick = () => { if(!inDialog) checkInteraction(); };
+  // Mobile Touch controls
+  const bindTouch = (id, k) => { 
+    const el = document.getElementById(id);
+    el.addEventListener('touchstart', e => { e.preventDefault(); keys[k]=1; el.classList.add('pressed'); }, {passive: false}); 
+    el.addEventListener('touchend', e => { e.preventDefault(); keys[k]=0; el.classList.remove('pressed'); }, {passive: false}); 
+    el.addEventListener('touchcancel', e => { keys[k]=0; el.classList.remove('pressed'); });
+  };
+  bindTouch('btn-up','w'); bindTouch('btn-down','s'); bindTouch('btn-left','a'); bindTouch('btn-right','d');
+  
+  const actBtn = document.getElementById('btn-act');
+  actBtn.addEventListener('touchstart', e => { e.preventDefault(); if(!inDialog) checkInteraction(); }, {passive: false});
+  actBtn.onclick = () => { if(!inDialog) checkInteraction(); };
 
   function gameLoop() {
     if(!inDialog && gameActive) {
       let moved = false;
-      // Movimiento con colisión simple de bordes y cambio de mapa
       if(keys.w && player.y > 20) { player.y -= player.speed; player.dir = 'up'; moved = true; }
       if(keys.s && player.y < 480) { player.y += player.speed; player.dir = 'down'; moved = true; }
       if(keys.a) { player.x -= player.speed; player.dir = 'left'; moved = true; if(player.x < 10) changeMap('left'); }
