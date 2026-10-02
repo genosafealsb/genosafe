@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GenoSafe: Operación ADN Seguro | 8-Bit Bioethics Arcade</title>
+  
+  <!-- Retro Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-space: #0b0716;
+      --bg-arcade: #160c2b;
+      --bg-box: #241442;
+      --border-dark: #0f0720;
+      
+      --p-neon-green: #39ff14;
+      --p-neon-green-dim: #1f9907;
+      --p-cyan: #00e5ff;
+      --p-cyan-dark: #008ca1;
+      --p-magenta: #ff007f;
+      --p-amber: #ffb703;
+      --p-red: #ff2a2a;
+      --p-yellow: #ffff00;
+      --p-white: #f5f5f5;
+      --p-gray: #7d7299;
+
+      --font-pixel: 'Press Start 2P', monospace;
+      --font-terminal: 'VT323', monospace;
+
+      /* Pixel border step box-shadows */
+      --pixel-box: 
+        0 -4px 0 0 #000,
+        0 4px 0 0 #000,
+        -4px 0 0 0 #000,
+        4px 0 0 0 #000,
+        0 -8px 0 0 var(--border-dark),
+        0 8px 0 0 var(--border-dark),
+        -8px 0 0 0 var(--border-dark),
+        8px 0 0 0 var(--border-dark);
+      
+      --pixel-btn-shadow: 
+        inset -4px -4px 0 0 rgba(0,0,0,0.5),
+        inset 4px 4px 0 0 rgba(255,255,255,0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: crisp-edges;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-space);
+      color: var(--p-white);
+      font-family: var(--font-pixel);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      position: relative;
+      overflow-x: hidden;
+      background-image: 
+        linear-gradient(rgba(36, 20, 66, 0.4) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(36, 20, 66, 0.4) 2px, transparent 2px);
+      background-size: 32px 32px;
+      background-position: -1px -1px;
+    }
+
+    .crt-overlay {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: linear-gradient(
+        rgba(18, 16, 26, 0) 50%, 
+        rgba(0, 0, 0, 0.28) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.03),
+        rgba(0, 255, 0, 0.01),
+        rgba(0, 0, 255, 0.03)
+      );
+      background-size: 100% 4px, 6px 100%;
+      opacity: 0.9;
+    }
+
+    .crt-vignette {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 998;
+      box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.85);
+    }
+
+    /* Master Arcade Cabinet Wrapper */
+    .arcade-machine {
+      width: 100%;
+      max-width: 820px;
+      background: var(--bg-arcade);
+      border: 8px solid #000;
+      box-shadow: 
+        0 0 0 4px var(--p-magenta),
+        0 0 25px rgba(255, 0, 127, 0.4),
+        0 20px 40px rgba(0,0,0,0.8);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Console Marquee */
+    .arcade-topbar {
+      background: #000;
+      border-bottom: 4px solid var(--p-cyan);
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .arcade-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--p-neon-green);
+      font-size: 0.8rem;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .dna-pixel-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-block;
+      animation: pixel-bounce 1s infinite alternate steps(2);
+    }
+
+    @keyframes pixel-bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
+    .arcade-controls {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .retro-pill-btn {
+      font-family: var(--font-pixel);
+      font-size: 0.55rem;
+      padding: 0.4rem 0.6rem;
+      background: var(--bg-box);
+      color: var(--p-cyan);
+      border: 2px solid var(--p-cyan);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .retro-pill-btn:hover {
+      background: var(--p-cyan);
+      color: #000;
+    }
+
+    .hud-meters {
+      background: #110924;
+      border-bottom: 4px solid #000;
+      padding: 0.85rem 1rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.9rem;
+    }
+
+    .meter-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .meter-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.55rem;
+      color: var(--p-gray);
+      text-transform: uppercase;
+    }
+
+    .meter-val {
+      font-family: var(--font-terminal);
+      font-size: 1.15rem;
+      color: var(--p-white);
+      letter-spacing: 1px;
+    }
+
+    .pixel-bar-frame {
+      height: 16px;
+      background: #000;
+      border: 2px solid var(--border-dark);
+      padding: 2px;
+      box-shadow: inset 2px 2px 0 rgba(0,0,0,0.8);
+      position: relative;
+    }
+
+    .pixel-bar-fill {
+      height: 100%;
+      width: 70%;
+      transition: width 0.3s steps(12);
+      box-shadow: inset 0 -2px 0 0 rgba(0,0,0,0.3);
+    }
+
+    .fill-privacy { background: var(--p-neon-green); }
+    .fill-family { background: var(--p-cyan); }
+    .fill-benefit { background: var(--p-amber); }
+
+    /* Main CRT Viewport Screen */
+    .arcade-screen {
+      padding: 1.75rem 1.4rem;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: radial-gradient(circle at center, #1f123b 0%, #120924 100%);
+    }
+
+    .game-scene {
+      display: none;
+    }
+
+    .game-scene.scene-active {
+      display: block;
+      animation: scene-fade 0.2s steps(4);
+    }
+
+    @keyframes scene-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .title-banner {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .title-sub {
+      color: var(--p-amber);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      margin-bottom: 0.6rem;
+      display: inline-block;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .title-main {
+      font-size: 1.65rem;
+      color: var(--p-neon-green);
+      line-height: 1.35;
+      text-shadow: 
+        4px 4px 0 #000, 
+        0 0 12px rgba(57, 255, 20, 0.4);
+      margin-bottom: 0.8rem;
+    }
+
+    .title-main span {
+      color: var(--p-cyan);
+    }
+
+    .title-tagline {
+      font-family: var(--font-terminal);
+      font-size: 1.3rem;
+      color: var(--p-white);
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.3;
+    }
+
+    .char-select-header {
+      text-align: center;
+      font-size: 0.65rem;
+      color: var(--p-magenta);
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+    }
+
+    .char-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .char-card {
+      background: var(--bg-box);
+      border: 4px solid var(--border-dark);
+      padding: 1rem;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 4px 4px 0 #000;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .char-card:hover, .char-card.selected {
+      border-color: var(--p-neon-green);
+      background: #2f1a56;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 #000, 0 0 10px rgba(57, 255, 20, 0.3);
+    }
+
+    .char-card.selected::after {
+      content: '► ELEGIDO ◄';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--p-neon-green);
+      color: #000;
+      font-size: 0.48rem;
+      padding: 2px 6px;
+      border: 2px solid #000;
+    }
+
+    .char-avatar-box {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0b0716;
+      border: 2px solid #000;
+    }
+
+    .char-name {
+      font-size: 0.75rem;
+      color: var(--p-yellow);
+      margin-bottom: 0.35rem;
+    }
+
+    .char-role {
+      font-family: var(--font-terminal);
+      font-size: 1.1rem;
+      color: var(--p-cyan);
+      margin-bottom: 0.4rem;
+    }
+
+    .char-trait {
+      font-family: var(--font-terminal);
+      font-size: 0.95rem;
+      color: var(--p-gray);
+      line-height: 1.2;
+    }
+
+    .press-start-container {
+      text-align: center;
+    }
+
+    .press-start-btn {
+      font-family: var(--font-pixel);
+      font-size: 0.9rem;
+      background: var(--p-neon-green);
+      color: #000;
+      border: 4px solid #000;
+      padding: 1rem 2rem;
+      cursor: pointer;
+      box-shadow: 
+        inset -4px -4px 0 0 var(--p-neon-green-dim),
+        inset 4px 4px 0 0 #b3ff99,
+        6px 6px 0 0 #000;
+      animation: btn-flash 1.2s infinite steps(2);
+    }
+
+    .press-start-btn:active {
+      transform: translate(4px, 4px);
+      box-shadow: 2px 2px 0 0 #000;
+    }
+
+    @keyframes btn-flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .dilemma-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed var(--p-gray);
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .dilemma-phase {
+      font-size: 0.65rem;
+      color: var(--p-amber);
+    }
+
+    .dilemma-cat {
+      font-family: var(--font-terminal);
+      font-size: 1.15rem;
+      color: var(--p-cyan);
+      text-transform: uppercase;
+    }
+
+    .dialogue-box {
+      background: #0f0720;
+      border: 4px solid var(--p-cyan);
+      box-shadow: 6px 6px 0 0 #000;
+      padding: 1.2rem;
+      margin-bottom: 1.4rem;
+      position: relative;
+    }
+
+    .speaker-row {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .speaker-avatar {
+      width: 48px;
+      height: 48px;
+      background: #000;
+      border: 2px solid var(--p-cyan);
+      flex-shrink: 0;
+    }
+
+    .speaker-name {
+      font-size: 0.7rem;
+      color: var(--p-yellow);
+    }
+
+    .speaker-affiliation {
+      font-family: var(--font-terminal);
+      font-size: 1rem;
+      color: var(--p-gray);
+    }
+
+    .dilemma-title {
+      font-size: 0.95rem;
+      color: var(--p-neon-green);
+      line-height: 1.4;
+      margin-bottom: 0.6rem;
+    }
+
+    .dilemma-text {
+      font-family: var(--font-terminal);
+      font-size: 1.35rem;
+      color: var(--p-white);
+      line-height: 1.3;
+      margin-bottom: 0.9rem;
+    }
+
+    .dilemma-warning-tag {
+      background: rgba(255, 42, 42, 0.15);
+      border-left: 4px solid var(--p-red);
+      padding: 0.4rem 0.6rem;
+      font-family: var(--font-terminal);
+      font-size: 1.1rem;
+      color: #ff9999;
+    }
+
+    .choices-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .choice-btn {
+      font-family: var(--font-pixel);
+      background: var(--bg-box);
+      border: 4px solid var(--p-gray);
+      color: var(--p-white);
+      padding: 1rem;
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #000;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--p-neon-green);
+      background: #2e1a54;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 #000;
+    }
+
+    .choice-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .choice-tag {
+      font-size: 0.55rem;
+      background: #000;
+      color: var(--p-amber);
+      padding: 2px 4px;
+      width: fit-content;
+      border: 1px solid var(--p-amber);
+    }
+
+    .choice-title {
+      font-size: 0.68rem;
+      line-height: 1.4;
+      color: var(--p-white);
+    }
+
+    .choice-desc {
+      font-family: var(--font-terminal);
+      font-size: 1.15rem;
+      color: var(--p-gray);
+      line-height: 1.2;
+    }
+
+    .retro-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 3, 15, 0.9);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .retro-modal-overlay.modal-show {
+      display: flex;
+      animation: modal-pop 0.15s steps(3);
+    }
+
+    @keyframes modal-pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .retro-modal-box {
+      background: var(--bg-arcade);
+      border: 6px solid #000;
+      box-shadow: 
+        0 0 0 4px var(--p-yellow),
+        10px 10px 0 0 #000;
+      max-width: 620px;
+      width: 100%;
+      padding: 1.5rem;
+    }
+
+    .modal-tag {
+      display: inline-block;
+      font-size: 0.55rem;
+      padding: 4px 8px;
+      margin-bottom: 0.8rem;
+      border: 2px solid #000;
+    }
+
+    .tag-safe { background: var(--p-neon-green); color: #000; }
+    .tag-danger { background: var(--p-red); color: #fff; }
+
+    .modal-headline {
+      font-size: 0.95rem;
+      color: var(--p-yellow);
+      margin-bottom: 0.8rem;
+      line-height: 1.35;
+    }
+
+    .modal-explanation {
+      font-family: var(--font-terminal);
+      font-size: 1.3rem;
+      color: var(--p-white);
+      line-height: 1.35;
+      margin-bottom: 1.2rem;
+    }
+
+    .modal-stat-diffs {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      background: #000;
+      padding: 0.6rem 0.8rem;
+      border: 2px solid var(--border-dark);
+    }
+
+    .stat-diff-pill {
+      font-family: var(--font-terminal);
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .diff-pos { color: var(--p-neon-green); }
+    .diff-neg { color: var(--p-red); }
+
+    .btn-next-stage {
+      font-family: var(--font-pixel);
+      font-size: 0.72rem;
+      background: var(--p-cyan);
+      color: #000;
+      border: 3px solid #000;
+      padding: 0.75rem 1.4rem;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #000;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-next-stage:hover {
+      background: #5cf4ff;
+    }
+
+    .result-screen-content {
+      text-align: center;
+    }
+
+    .trophy-sprite {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.2rem;
+    }
+
+    .result-rank-pill {
+      display: inline-block;
+      font-size: 0.6rem;
+      color: var(--p-amber);
+      border: 2px solid var(--p-amber);
+      padding: 4px 8px;
+      margin-bottom: 0.6rem;
+    }
+
+    .result-title {
+      font-size: 1.25rem;
+      color: var(--p-neon-green);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+    }
+
+    .result-card-report {
+      background: #0c061a;
+      border: 4px solid var(--border-dark);
+      padding: 1.2rem;
+      text-align: left;
+      font-family: var(--font-terminal);
+      font-size: 1.3rem;
+      color: var(--p-white);
+      line-height: 1.35;
+      margin-bottom: 1.5rem;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    .result-card-report strong {
+      color: var(--p-cyan);
+    }
+
+    .result-quote {
+      border-left: 3px solid var(--p-amber);
+      padding-left: 0.6rem;
+      margin-top: 0.8rem;
+      color: var(--p-yellow);
+      font-style: italic;
+    }
+
+    .result-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-retro-action {
+      font-family: var(--font-pixel);
+      font-size: 0.68rem;
+      padding: 0.8rem 1.2rem;
+      border: 3px solid #000;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #000;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-replay {
+      background: var(--p-neon-green);
+      color: #000;
+    }
+
+    .btn-home {
+      background: var(--bg-box);
+      color: var(--p-cyan);
+      border-color: var(--p-cyan);
+    }
+
+    .btn-replay:hover { background: #6bff4d; }
+    .btn-home:hover { background: var(--p-cyan); color: #000; }
+
+    /* Bottom Status Strip */
+    .arcade-bottom-bar {
+      background: #000;
+      border-top: 4px solid var(--border-dark);
+      padding: 0.5rem 1rem;
+      font-family: var(--font-terminal);
+      font-size: 1rem;
+      color: var(--p-gray);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .crt-toggle-btn {
+      background: none;
+      border: 1px solid var(--p-gray);
+      color: var(--p-gray);
+      font-family: var(--font-pixel);
+      font-size: 0.5rem;
+      padding: 2px 6px;
+      cursor: pointer;
+    }
+
+    .crt-toggle-btn:hover {
+      color: var(--p-white);
+      border-color: var(--p-white);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+      .hud-meters {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+      }
+      .char-grid {
+        grid-template-columns: 1fr;
+      }
+      .choices-grid {
+        grid-template-columns: 1fr;
+      }
+      .title-main {
+        font-size: 1.25rem;
+      }
+      .arcade-screen {
+        padding: 1.2rem 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Retro CRT Scanline & Vignette Effect Overlays -->
+  <div class="crt-overlay" id="crt-overlay"></div>
+  <div class="crt-vignette"></div>
+
+  <div class="arcade-machine">
+    
+    <!-- Top Console Bar -->
+    <header class="arcade-topbar">
+      <div class="arcade-logo">
+        <!-- SVG Pixel Art DNA Icon -->
+        <svg class="dna-pixel-icon" viewBox="0 0 16 16" fill="none">
+          <rect x="2" y="2" width="2" height="2" fill="#39ff14"/>
+          <rect x="12" y="2" width="2" height="2" fill="#00e5ff"/>
+          <rect x="4" y="4" width="8" height="2" fill="#ffffff"/>
+          <rect x="6" y="6" width="4" height="2" fill="#39ff14"/>
+          <rect x="4" y="8" width="8" height="2" fill="#00e5ff"/>
+          <rect x="2" y="10" width="2" height="2" fill="#00e5ff"/>
+          <rect x="12" y="10" width="2" height="2" fill="#39ff14"/>
+          <rect x="4" y="12" width="8" height="2" fill="#ffffff"/>
+        </svg>
+        <span>GenoSafe // ARCADE v2.6</span>
+      </div>
+
+      <div class="arcade-controls">
+        <button class="retro-pill-btn" id="btn-audio-toggle" onclick="toggleAudio()" title="Activar/Silenciar Chiptune">
+          <span id="audio-icon">🔊</span> AUDIO: ON
+        </button>
+        <a href="index.html" class="retro-pill-btn" onclick="playBeep('select')">
+          ◄ WEB
+        </a>
+      </div>
+    </header>
+
+    <!-- RPG HUD Meters (Integrity, Shield, Experience) -->
+    <section class="hud-meters" aria-label="Barras de Estado">
+      
+      <!-- Privacy Meter -->
+      <div class="meter-card">
+        <div class="meter-label-row">
+          <span>💚 PRIVACIDAD ADN</span>
+          <span class="meter-val" id="hud-val-privacy">75%</span>
+        </div>
+        <div class="pixel-bar-frame">
+          <div class="pixel-bar-fill fill-privacy" id="hud-bar-privacy" style="width: 75%;"></div>
+        </div>
+      </div>
+
+      <!-- Family Meter -->
+      <div class="meter-card">
+        <div class="meter-label-row">
+          <span>🛡️ ESCUDO FAMILIAR</span>
+          <span class="meter-val" id="hud-val-family">75%</span>
+        </div>
+        <div class="pixel-bar-frame">
+          <div class="pixel-bar-fill fill-family" id="hud-bar-family" style="width: 75%;"></div>
+        </div>
+      </div>
+
+      <!-- Benefit / XP Meter -->
+      <div class="meter-card">
+        <div class="meter-label-row">
+          <span>⚡ REPUTACIÓN / XP</span>
+          <span class="meter-val" id="hud-val-benefit">50%</span>
+        </div>
+        <div class="pixel-bar-frame">
+          <div class="pixel-bar-fill fill-benefit" id="hud-bar-benefit" style="width: 50%;"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Main CRT Game Canvas -->
+    <main class="arcade-screen">
+
+      <!-- ==========================================
+           SCENE 1: TITLE SCREEN & CHARACTER SELECT
+           ========================================== -->
+      <section class="game-scene scene-active" id="scene-title">
+        <div class="title-banner">
+          <span class="title-sub">★ PROTOCOLO BIOÉTICO 8-BIT ★</span>
+          <h1 class="title-main">OPERACIÓN<br><span>ADN SEGURO</span></h1>
+          <p class="title-tagline">
+            Protege el código biológico más íntimo del ser humano frente a corporaciones, biobancos y algoritmos de re-identificación.
+          </p>
+        </div>
+
+        <div class="char-select-header">► SELECCIONA TU AVATAR DE INVESTIGACIÓN ◄</div>
+
+        <div class="char-grid">
+          
+          <!-- Character 1: Researcher -->
+          <div class="char-card selected" id="card-char-0" onclick="selectChar(0)">
+            <div class="char-avatar-box">
+              <!-- Pixel Art Sprite Dra. Byte (Bioinformática) -->
+              <svg width="48" height="48" viewBox="0 0 16 16" fill="none">
+                <!-- Hair -->
+                <rect x="5" y="1" width="6" height="2" fill="#5a3825"/>
+                <rect x="4" y="2" width="8" height="2" fill="#5a3825"/>
+                <rect x="3" y="4" width="2" height="6" fill="#5a3825"/>
+                <!-- Face -->
+                <rect x="5" y="3" width="6" height="5" fill="#fcd0a1"/>
+                <!-- Glasses -->
+                <rect x="5" y="4" width="2" height="2" fill="#00e5ff"/>
+                <rect x="8" y="4" width="2" height="2" fill="#00e5ff"/>
+                <rect x="7" y="4" width="1" height="1" fill="#000"/>
+                <!-- Body / Lab Coat -->
+                <rect x="4" y="8" width="8" height="6" fill="#f5f5f5"/>
+                <rect x="6" y="9" width="4" height="5" fill="#00e5ff"/>
+                <!-- Badge -->
+                <rect x="5" y="9" width="1" height="2" fill="#39ff14"/>
+              </svg>
+            </div>
+            <div class="char-name">Dra. Byte</div>
+            <div class="char-role">Bioinformática Forense</div>
+            <div class="char-trait">Experta en criptografía homomórfica y formatos VCF/BAM.</div>
+          </div>
+
+          <!-- Character 2: Citizen Patient -->
+          <div class="char-card" id="card-char-1" onclick="selectChar(1)">
+            <div class="char-avatar-box">
+              <!-- Pixel Art Sprite Alex (Ciudadano / Donante) -->
+              <svg width="48" height="48" viewBox="0 0 16 16" fill="none">
+                <!-- Cap/Hair -->
+                <rect x="5" y="1" width="6" height="2" fill="#ffb703"/>
+                <rect x="4" y="2" width="8" height="2" fill="#ffb703"/>
+                <!-- Face -->
+                <rect x="5" y="3" width="6" height="5" fill="#e0ac69"/>
+                <!-- Eyes -->
+                <rect x="6" y="4" width="1" height="1" fill="#000"/>
+                <rect x="9" y="4" width="1" height="1" fill="#000"/>
+                <!-- Jacket -->
+                <rect x="4" y="8" width="8" height="6" fill="#ff007f"/>
+                <rect x="6" y="8" width="4" height="6" fill="#241442"/>
+                <!-- DNA Pin -->
+                <rect x="5" y="9" width="1" height="1" fill="#39ff14"/>
+              </svg>
+            </div>
+            <div class="char-name">Alex V.</div>
+            <div class="char-role">Paciente Voluntario</div>
+            <div class="char-trait">Curioso por sus ancestros pero celoso de la intimidad familiar.</div>
+          </div>
+
+        </div>
+
+        <div class="press-start-container">
+          <button class="press-start-btn" onclick="startGame()">
+            INSERT COIN / INICIAR MISIÓN ►
+          </button>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           SCENE 2: DILEMMA / QUEST SCREEN
+           ========================================== -->
+      <section class="game-scene" id="scene-gameplay">
+        
+        <div class="dilemma-header">
+          <span class="dilemma-phase" id="quest-phase">CASO 1 / 5</span>
+          <span class="dilemma-cat" id="quest-cat">DIRECT-TO-CONSUMER</span>
+        </div>
+
+        <div class="dialogue-box">
+          <div class="speaker-row">
+            <div class="speaker-avatar" id="quest-speaker-avatar">
+              <!-- Dynamic NPC Avatar Pixel Art -->
+            </div>
+            <div>
+              <div class="speaker-name" id="quest-speaker-name">Entidad Comercial DTC</div>
+              <div class="speaker-affiliation" id="quest-speaker-title">Laboratorio Biométrico Privado</div>
+            </div>
+          </div>
+
+          <h2 class="dilemma-title" id="quest-title">El Kit de Ancestros a 19€</h2>
+          <p class="dilemma-text" id="quest-desc">
+            Una startup te ofrece secuenciar tu ADN y regalarte un mapa genealógico si cedes los derechos perpetuos de tu genoma bruto para entrenar IA farmacéutica internacional.
+          </p>
+
+          <div class="dilemma-warning-tag" id="quest-warning">
+            ⚠️ Art. 9 RGPD: Los datos genéticos gozan de protección reforzada; su tratamiento está prohibido sin consentimiento explícito informado.
+          </div>
+        </div>
+
+        <div class="choices-grid">
+          
+          <button class="choice-btn" onclick="makeChoice(0)">
+            <span class="choice-tag">BOTÓN [A]</span>
+            <span class="choice-title" id="opt-0-title">Aceptar la oferta gratuita</span>
+            <span class="choice-desc" id="opt-0-desc">Envías tu muestra de saliva y autorizas la venta de tus secuencias brutas.</span>
+          </button>
+
+          <button class="choice-btn" onclick="makeChoice(1)">
+            <span class="choice-tag">BOTÓN [B]</span>
+            <span class="choice-title" id="opt-1-title">Exigir minimización de datos</span>
+            <span class="choice-desc" id="opt-1-desc">Pagas la tasa de análisis exigiendo destrucción física y borrado de registros.</span>
+          </button>
+
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           SCENE 3: FINAL VICTORY / DIAGNOSIS SCREEN
+           ========================================== -->
+      <section class="game-scene" id="scene-result">
+        
+        <div class="result-screen-content">
+          
+          <!-- Pixel Art Trophy Sprite -->
+          <div class="trophy-sprite" id="res-trophy-svg">
+            <!-- Dynamically populated trophy SVG -->
+          </div>
+
+          <span class="result-rank-pill" id="res-rank-pill">RANGO OBTENIDO: CUSTODIO DE ORO</span>
+          <h2 class="result-title" id="res-title">MISIÓN CUMPLIDA: SOBERANÍA GENÓMICA</h2>
+
+          <div class="result-card-report">
+            <div id="res-narrative-text">
+              <!-- Dynamically populated bioethics synthesis -->
+            </div>
+            <div class="result-quote" id="res-quote">
+              "El ADN no es solo tu identidad privada: es el libro compartido de toda tu estirpe biológica."
+            </div>
+          </div>
+
+          <div class="result-buttons">
+            <button class="btn-retro-action btn-replay" onclick="resetGame()">
+              ↻ REINTENTAR PARTIDA
+            </button>
+            <a href="index.html" class="btn-retro-action btn-home" onclick="playBeep('select')">
+              ◄ VOLVER AL PORTAL GENOSAFE
+            </a>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Bottom Arcade Cabinet Status Bar -->
+    <footer class="arcade-bottom-bar">
+      <div>CREDITS: <span style="color:var(--p-neon-green);">FREE PLAY</span> // GENOSAFE ENGINE</div>
+      <div>
+        <button class="crt-toggle-btn" onclick="toggleCRT()">TOGGLE SCANLINES</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================
+       CONSEQUENCE POPUP MODAL (Bioethics Feedback)
+       ========================================== -->
+  <div class="retro-modal-overlay" id="modal-consequence">
+    <div class="retro-modal-box">
+      <span class="modal-tag" id="modal-tag-type">IMPACTO EN LA MISIÓN</span>
+      <h3 class="modal-headline" id="modal-headline">Resultado del Dilema</h3>
+      <p class="modal-explanation" id="modal-explanation">
+        Explicación bioética del dilema seleccionado...
+      </p>
+
+      <div class="modal-stat-diffs" id="modal-diffs-container">
+        <!-- Metric Diffs -->
+      </div>
+
+      <button class="btn-next-stage" onclick="nextStage()">
+        CONTINUAR AL SIGUIENTE CASO ►
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       CHIPTUNE AUDIO ENGINE & GAME LOGIC
+       ========================================== -->
+  <script>
+    /* ==========================================================================
+       1. SYNTHESIZED CHIPTUNE RETRO SOUND ENGINE (Web Audio API)
+       --------------------------------------------------------------------------
+       Generates authentic 8-bit beeps, coin sounds, warnings, and jingles
+       on-the-fly without requiring any external audio files.
+       ========================================================================== */
+    let audioCtx = null;
+    let audioEnabled = true;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const btn = document.getElementById('btn-audio-toggle');
+      const icon = document.getElementById('audio-icon');
+      if (audioEnabled) {
+        btn.innerHTML = '<span>🔊</span> AUDIO: ON';
+        playBeep('select');
+      } else {
+        btn.innerHTML = '<span>🔇</span> AUDIO: OFF';
+      }
+    }
+
+    function toggleCRT() {
+      const crt = document.getElementById('crt-overlay');
+      crt.style.display = (crt.style.display === 'none') ? 'block' : 'none';
+      playBeep('select');
+    }
+
+    /**
+     * Synthesizes 8-bit retro sound frequencies
+     */
+    function playBeep(type) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'select') {
+          // Classic crisp UI blip
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.setValueAtTime(880, now + 0.04);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+          osc.start(now);
+          osc.stop(now + 0.09);
+
+        } else if (type === 'coin') {
+          // Mario/Arcade coin chime
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(987.77, now); // B5
+          osc.frequency.setValueAtTime(1318.51, now + 0.08); // E6
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+
+        } else if (type === 'good') {
+          // Positive retro victory chord
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.06); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.12); // G5
+          osc.frequency.setValueAtTime(1046.50, now + 0.18); // C6
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.start(now);
+          osc.stop(now + 0.45);
+
+        } else if (type === 'bad') {
+          // Retro error buzzer / zap
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.setValueAtTime(130, now + 0.08);
+          osc.frequency.setValueAtTime(65, now + 0.16);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+          osc.start(now);
+          osc.stop(now + 0.28);
+
+        } else if (type === 'victory') {
+          // Arcade fanfarria
+          [
+            { f: 523.25, d: 0.1 },
+            { f: 659.25, d: 0.1 },
+            { f: 783.99, d: 0.1 },
+            { f: 1046.50, d: 0.35 }
+          ].forEach((note, i) => {
+            const nOsc = ctx.createOscillator();
+            const nGain = ctx.createGain();
+            nOsc.type = 'square';
+            nOsc.connect(nGain);
+            nGain.connect(ctx.destination);
+            const startTime = now + (i * 0.1);
+            nOsc.frequency.setValueAtTime(note.f, startTime);
+            nGain.gain.setValueAtTime(0.1, startTime);
+            nGain.gain.exponentialRampToValueAtTime(0.001, startTime + note.d);
+            nOsc.start(startTime);
+            nOsc.stop(startTime + note.d);
+          });
+        }
+      } catch (err) {
+        // Fallback for browsers with restricted autoplay
+        console.warn('Audio note skipped:', err);
+      }
+    }
+
+    /* ==========================================================================
+       2. GAME STATE & NARRATIVE DATABASE
+       --------------------------------------------------------------------------
+       5 Rigorous Academic Genomic Privacy Dilemmas
+       ========================================================================== */
+    const state = {
+      privacy: 75,
+      family: 75,
+      benefit: 50,
+      currentDilemma: 0,
+      characterIndex: 0
+    };
+
+    const NPC_AVATARS = {
+      dtc: `
+        <svg width="48" height="48" viewBox="0 0 16 16" fill="none">
+          <rect x="5" y="2" width="6" height="4" fill="#00e5ff"/>
+          <rect x="6" y="3" width="1" height="1" fill="#000"/>
+          <rect x="9" y="3" width="1" height="1" fill="#000"/>
+          <rect x="4" y="6" width="8" height="8" fill="#1e1035"/>
+          <rect x="6" y="7" width="4" height="4" fill="#ffb703"/>
+          <rect x="7" y="8" width="2" height="2" fill="#000"/>
+        </svg>
+      `,
+      police: `
+        <svg width="48" height="48" viewBox="0 0 16 16" fill="none">
+          <rect x="4" y="2" width="8" height="3" fill="#0055ff"/>
+          <rect x="6" y="1" width="4" height="1" fill="#ffb703"/>
+          <rect x="5" y="5" width="6" height="4" fill="#fcd0a1"/>
+          <rect x="6" y="6" width="1" height="1" fill="#000"/>
+          <rect x="9" y="6" width="1" height="1" fill="#000"/>
+          <rect x="4" y="9" width="8" height="5" fill="#001f5c"/>
+          <rect x="5" y="10" width="2" height="2" fill="#ffb703"/>
+        </svg>
+      `,
+      insurer: `
+        <svg width="48" height="48" viewBox="0 0 16 16" fill="none">
+          <rect x="5" y="2" width="6" height="3" fill="#4a5568"/>
+          <rect x="5" y="5" width="6" height="4" fill="#e2e8f0"/>
+          <rect x="6" y="6" width="1" height="1" fill="#000"/>
+          <rect x="9" y="6" width="1" height="1" fill="#000"/>
+          <rect x="4" y="9" width="8" height="5" fill="#2d3748"/>
+          <rect x="7" y="9" width="2" height="4" fill="#ff2a2a"/>
+        </svg>
+      `,
+      biobank: `
+        <svg width="48" height="48" viewBox="0 0 16 16" fill="none">
+          <rect x="5" y="2" width="6" height="4" fill="#10b981"/>
+          <rect x="5" y="5" width="6" height="4" fill="#fcd0a1"/>
+          <rect x="5" y="5" width="6" height="2" fill="#00e5ff"/>
+          <rect x="4" y="9" width="8" height="5" fill="#ffffff"/>
+          <rect x="7" y="10" width="2" height="3" fill="#10b981"/>
+        </svg>
+      `,
+      cyber: `
+        <svg width="48" height="48" viewBox="0 0 16 16" fill="none">
+          <rect x="4" y="2" width="8" height="6" fill="#ff007f"/>
+          <rect x="5" y="4" width="2" height="2" fill="#39ff14"/>
+          <rect x="9" y="4" width="2" height="2" fill="#39ff14"/>
+          <rect x="4" y="8" width="8" height="6" fill="#110924"/>
+          <rect x="6" y="9" width="4" height="1" fill="#00e5ff"/>
+          <rect x="7" y="11" width="2" height="1" fill="#00e5ff"/>
+        </svg>
+      `
+    };
+
+    const DILEMMAS = [
+      {
+        phase: "CASO 1 / 5",
+        category: "DIRECT-TO-CONSUMER (DTC)",
+        speakerName: "Genomix Ancestry Corp",
+        speakerTitle: "Servicio Genealógico Digital",
+        avatar: NPC_AVATARS.dtc,
+        title: "Test de Ancestros a Precio Irrisorio",
+        desc: "Una plataforma web ofrece secuenciar tus 3.000 millones de pares de bases por solo 19€. A cambio, debes marcar una casilla aceptando transferir tus archivos de variantes (.VCF) a socios farmacéuticos y de márketing biomédico.",
+        warning: "⚠️ Art. 9 RGPD: Los datos genéticos tienen prohibido su tratamiento salvo excepciones sanitarias o consentimiento explícito reforzado.",
+        choices: [
+          {
+            title: "Ceder los datos y pagar 19€",
+            desc: "Obtienes el informe de etnias de inmediato a coste casi cero.",
+            effects: { privacy: -30, family: -25, benefit: +25 },
+            type: "danger",
+            headline: "¡Venta Masiva de Variantes Genéticas!",
+            explanation: "Tus secuencias de nucleótidos han sido integradas en repositorios comerciales en la nube. A diferencia de una tarjeta bancaria robada, no podrás jamás 'resetear' tu genoma. Tus familiares ahora son trazables en esa red."
+          },
+          {
+            title: "Pagar tarifa estándar con destrucción de muestra",
+            desc: "Exiges la eliminación del remanente biológico y de los ficheros digitales tras el test.",
+            effects: { privacy: +15, family: +15, benefit: -10 },
+            type: "safe",
+            headline: "Principio de Minimización (Art. 5 RGPD)",
+            explanation: "¡Excelente decisión! Exigir el borrado del archivo FASTQ/VCF y la incineración del tubo de saliva impide que terceros lucren o crucen tus marcadores biológicos sin supervisión."
+          }
+        ]
+      },
+      {
+        phase: "CASO 2 / 5",
+        category: "GENEALOGÍA FORENSE ABIERTA",
+        speakerName: "Inspector Ramírez",
+        speakerTitle: "Unidad de Delitos Sin Resolver",
+        avatar: NPC_AVATARS.police,
+        title: "Petición GEDmatch sin Mandamiento Judicial",
+        desc: "Agentes policiales investigan un delito de hace 20 años. Solicitan que subas voluntariamente tu perfil genético a una base de datos abierta (GEDmatch) porque sospechan que el autor es tu primo segundo lejano.",
+        warning: "🧬 Precedente Forense: En el caso del Golden State Killer, el asesino fue localizado a través del ADN de parientes que nunca sospecharon ser investigados.",
+        choices: [
+          {
+            title: "Subir el ADN en modo abierto a las fuerzas del orden",
+            desc: "Colaboras con la resolución de crímenes sin requerir orden de un juez.",
+            effects: { privacy: -25, family: -35, benefit: +20 },
+            type: "danger",
+            headline: "Vigilancia Genética Familiar Colateral",
+            explanation: "Has convertido a toda tu rama familiar en sospechosos potenciales de cotejo permanente. Violaste la autonomía moral de tus primos e hijos, exponiéndolos a falsos positivos en bases forenses de acceso libre."
+          },
+          {
+            title: "Exigir orden judicial y tutela judicial de garantías",
+            desc: "Rechazas la búsqueda en portales abiertos; la policía debe actuar bajo control judicial.",
+            effects: { privacy: +15, family: +20, benefit: -10 },
+            type: "safe",
+            headline: "Blindaje del Árbol Genealógico",
+            explanation: "¡Acertado! El Estado de Derecho exige mandamiento judicial motivado e individualizado para acceder al patrimonio biológico familiar, impidiendo la pesca masiva de datos genéticos."
+          }
+        ]
+      },
+      {
+        phase: "CASO 3 / 5",
+        category: "ACTUARIADO & DISCRIMINACIÓN",
+        speakerName: "Aseguradora AlfaSegur",
+        speakerTitle: "Departamento de Riesgos Vitalicios",
+        avatar: NPC_AVATARS.insurer,
+        title: "Descuento del 40% por Cribado de Polimorfismos",
+        desc: "Tu compañía aseguradora te bonificará el seguro de vida y salud si te sometes a un screening de variantes predisponentes (genes BRCA1/2, APOE, Huntingtina). Prometen 'ayudarte a prevenir'.",
+        warning: "⚖️ Convenio de Oviedo (Art. 11): Prohíbe cualquier forma de discriminación laboral, bancaria o aseguradora contra una persona por razón de su patrimonio genético.",
+        choices: [
+          {
+            title: "Compartir el informe médico completo por la oferta",
+            desc: "Confías en tu buena salud para ahorrar dinero en la cuota mensual.",
+            effects: { privacy: -30, family: -30, benefit: +30 },
+            type: "danger",
+            headline: "Asimetría Actuarial y Denegación Futura",
+            explanation: "Si en el futuro se descubren nuevas correlaciones patógenas en tus variantes, la aseguradora cancelará tu cobertura o la encarecerá a tus descendientes directos por 'agravamiento del riesgo'."
+          },
+          {
+            title: "Rechazar invocando el Derecho a la No Discriminación",
+            desc: "Pagas la prima regular y reservas tus datos clínicos a facultativos médicos.",
+            effects: { privacy: +15, family: +15, benefit: -15 },
+            type: "safe",
+            headline: "Protección frente a la Selección Adversa",
+            explanation: "¡Correcto! Los datos genéticos probabilísticos nunca deben convertirse en un filtro mercantil que cree castas de ciudadanos inasegurables o discriminados."
+          }
+        ]
+      },
+      {
+        phase: "CASO 4 / 5",
+        category: "BIOBANCOS & INVESTIGACIÓN",
+        speakerName: "Dr. Mendoza",
+        speakerTitle: "Consorcio Hospitalario de Oncología",
+        avatar: NPC_AVATARS.biobank,
+        title: "Donación a Biobanco: ¿En Blanco o Dinámico?",
+        desc: "El hospital donde te tratas te invita a participar en un estudio oncológico internacional. Te ofrecen dos tipos de consentimiento para tus muestras de tejido y ADN.",
+        warning: "💡 Avance Médico: La investigación biomédica es clave contra el cáncer, pero requiere salvaguardas técnicas como Privacidad Diferencial y Cifrado Homomórfico.",
+        choices: [
+          {
+            title: "Firmar Consentimiento 'en blanco' indefinido",
+            desc: "Cedes tu muestra para cualquier fin futuro sin que deban volver a consultarte.",
+            effects: { privacy: -15, family: -15, benefit: +20 },
+            type: "danger",
+            headline: "Pérdida de Trazabilidad Bioética",
+            explanation: "Un consentimiento amplio no auditable facilita que tus células sean transferidas a laboratorios en países sin protección de datos o convertidas en líneas celulares patentadas comercialmente."
+          },
+          {
+            title: "Elegir Consentimiento Dinámico con Cifrado Homomórfico",
+            desc: "Autorizas proyecto a proyecto desde una app cifrada donde se computa sobre datos encriptados.",
+            effects: { privacy: +20, family: +15, benefit: +20 },
+            type: "safe",
+            headline: "El Estándar de Oro GenoSafe",
+            explanation: "¡La vanguardia bioética! El cómputo seguro permite a los oncólogos analizar patrones sin 'ver' tu secuencia descifrada, y tú mantienes el botón de revocación en todo momento."
+          }
+        ]
+      },
+      {
+        phase: "CASO 5 / 5",
+        category: "INTELIGENCIA ARTIFICIAL & CLONES",
+        speakerName: "NeoGen Labs Inc",
+        speakerTitle: "Startup de Simulación Biológica",
+        avatar: NPC_AVATARS.cyber,
+        title: "El 'Gemelo Genómico Digital' en la Nube",
+        desc: "Una app viral te ofrece crear un avatar digital 3D hiperrealista que simula cómo envejecerá tu rostro y tu cuerpo si subes tu genoma completo sin anonimizar a servidores cloud extranjeros.",
+        warning: "🛡️ Ciberseguridad: Una vez en servidores no securizados, tu genoma puede ser usado para sintetizar deepfakes biológicos o deducir tu fisonomía exacta.",
+        choices: [
+          {
+            title: "Subir el genoma para ver la simulación viral",
+            desc: "Compartes el resultado visual en tus redes sociales para ganar seguidores.",
+            effects: { privacy: -35, family: -20, benefit: +25 },
+            type: "danger",
+            headline: "Fenotipado Genético Re-identificado",
+            explanation: "Tu perfil fenotípico completo ha quedado expuesto. Con técnicas actuales, a partir de ese modelo se puede reconstruir tu rostro real, tu grupo sanguíneo y tus susceptibilidades neurológicas."
+          },
+          {
+            title: "Desinstalar y reportar la aplicación",
+            desc: "Te niegas a frivolizar el código de la vida para entretenimiento efímero.",
+            effects: { privacy: +20, family: +15, benefit: -5 },
+            type: "safe",
+            headline: "Madurez Digital y Soberanía Biológica",
+            explanation: "¡Excelente cierre! El genoma humano no es un filtro de red social. Exigir computación local y respetar la dignidad del cuerpo digital es el pilar central de GenoSafe."
+          }
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       3. CONTROLLER & UI FUNCTIONS
+       ========================================================================== */
+    function showScene(sceneId) {
+      document.querySelectorAll('.game-scene').forEach(sc => sc.classList.remove('scene-active'));
+      const target = document.getElementById(sceneId);
+      if (target) target.classList.add('scene-active');
+    }
+
+    function selectChar(index) {
+      state.characterIndex = index;
+      document.querySelectorAll('.char-card').forEach((c, idx) => {
+        c.classList.toggle('selected', idx === index);
+      });
+      playBeep('select');
+    }
+
+    function updateHud() {
+      // Clamping between 0% and 100%
+      state.privacy = Math.max(0, Math.min(100, state.privacy));
+      state.family = Math.max(0, Math.min(100, state.family));
+      state.benefit = Math.max(0, Math.min(100, state.benefit));
+
+      document.getElementById('hud-val-privacy').textContent = state.privacy + '%';
+      document.getElementById('hud-bar-privacy').style.width = state.privacy + '%';
+
+      document.getElementById('hud-val-family').textContent = state.family + '%';
+      document.getElementById('hud-bar-family').style.width = state.family + '%';
+
+      document.getElementById('hud-val-benefit').textContent = state.benefit + '%';
+      document.getElementById('hud-bar-benefit').style.width = state.benefit + '%';
+    }
+
+    function startGame() {
+      playBeep('coin');
+      state.privacy = 75;
+      state.family = 75;
+      state.benefit = 50;
+      state.currentDilemma = 0;
+      updateHud();
+      loadDilemma(0);
+      showScene('scene-gameplay');
+    }
+
+    function loadDilemma(index) {
+      const d = DILEMMAS[index];
+      document.getElementById('quest-phase').textContent = d.phase;
+      document.getElementById('quest-cat').textContent = d.category;
+      document.getElementById('quest-speaker-name').textContent = d.speakerName;
+      document.getElementById('quest-speaker-title').textContent = d.speakerTitle;
+      document.getElementById('quest-speaker-avatar').innerHTML = d.avatar;
+      
+      document.getElementById('quest-title').textContent = d.title;
+      document.getElementById('quest-desc').textContent = d.desc;
+      document.getElementById('quest-warning').textContent = d.warning;
+
+      // Choices
+      document.getElementById('opt-0-title').textContent = d.choices[0].title;
+      document.getElementById('opt-0-desc').textContent = d.choices[0].desc;
+
+      document.getElementById('opt-1-title').textContent = d.choices[1].title;
+      document.getElementById('opt-1-desc').textContent = d.choices[1].desc;
+    }
+
+    function makeChoice(choiceIdx) {
+      const d = DILEMMAS[state.currentDilemma];
+      const ch = d.choices[choiceIdx];
+
+      // Apply modifiers
+      state.privacy += ch.effects.privacy;
+      state.family += ch.effects.family;
+      state.benefit += ch.effects.benefit;
+      updateHud();
+
+      // Sound
+      if (ch.type === 'safe') {
+        playBeep('good');
+      } else {
+        playBeep('bad');
+      }
+
+      // Populate Consequence Modal
+      const modalTag = document.getElementById('modal-tag-type');
+      modalTag.className = `modal-tag ${ch.type === 'safe' ? 'tag-safe' : 'tag-danger'}`;
+      modalTag.textContent = ch.type === 'safe' ? '✓ DECISIÓN BIOÉTICA CORRECTA' : '⚠️ ALERTA DE VULNERABILIDAD';
+
+      document.getElementById('modal-headline').textContent = ch.headline;
+      document.getElementById('modal-explanation').textContent = ch.explanation;
+
+      // Diffs render
+      const diffContainer = document.getElementById('modal-diffs-container');
+      diffContainer.innerHTML = `
+        <div class="stat-diff-pill ${ch.effects.privacy >= 0 ? 'diff-pos' : 'diff-neg'}">
+          PRIVACIDAD: ${ch.effects.privacy > 0 ? '+' : ''}${ch.effects.privacy}%
+        </div>
+        <div class="stat-diff-pill ${ch.effects.family >= 0 ? 'diff-pos' : 'diff-neg'}">
+          FAMILIA: ${ch.effects.family > 0 ? '+' : ''}${ch.effects.family}%
+        </div>
+        <div class="stat-diff-pill ${ch.effects.benefit >= 0 ? 'diff-pos' : 'diff-neg'}">
+          XP/REPUTACIÓN: ${ch.effects.benefit > 0 ? '+' : ''}${ch.effects.benefit}%
+        </div>
+      `;
+
+      document.getElementById('modal-consequence').classList.add('modal-show');
+    }
+
+    function nextStage() {
+      document.getElementById('modal-consequence').classList.remove('modal-show');
+      playBeep('select');
+      state.currentDilemma++;
+
+      if (state.currentDilemma < DILEMMAS.length) {
+        loadDilemma(state.currentDilemma);
+      } else {
+        finishGame();
+      }
+    }
+
+    /* ==========================================================================
+       4. GAME OVER & TROPHY GRADUATION
+       ========================================================================== */
+    function finishGame() {
+      playBeep('victory');
+      showScene('scene-result');
+
+      const trophyContainer = document.getElementById('res-trophy-svg');
+      const rankPill = document.getElementById('res-rank-pill');
+      const title = document.getElementById('res-title');
+      const narrative = document.getElementById('res-narrative-text');
+      const quote = document.getElementById('res-quote');
+
+      // Global composite bioethics rating
+      const totalScore = (state.privacy * 0.45) + (state.family * 0.45) + (state.benefit * 0.1);
+
+      if (totalScore >= 70) {
+        // GOLD TROPHY
+        trophyContainer.innerHTML = `
+          <svg width="80" height="80" viewBox="0 0 16 16" fill="none">
+            <rect x="5" y="2" width="6" height="2" fill="#ffb703"/>
+            <rect x="4" y="4" width="8" height="4" fill="#ffd000"/>
+            <rect x="3" y="4" width="1" height="2" fill="#ffd000"/>
+            <rect x="12" y="4" width="1" height="2" fill="#ffd000"/>
+            <rect x="6" y="8" width="4" height="2" fill="#ffd000"/>
+            <rect x="7" y="10" width="2" height="2" fill="#ffb703"/>
+            <rect x="5" y="12" width="6" height="2" fill="#996300"/>
+            <rect x="7" y="5" width="2" height="2" fill="#39ff14"/>
+          </svg>
+        `;
+        rankPill.textContent = 'RANGO: CUSTODIO GENÓMICO LEGENDARIO (ORO)';
+        rankPill.style.color = '#ffd000';
+        rankPill.style.borderColor = '#ffd000';
+        title.textContent = 'SOBERANÍA Y PRIVACIDAD ABSOLUTA';
+        narrative.innerHTML = `
+          <p>¡Victoria científica impecable! Has demostrado un conocimiento superior de la <strong>inmutabilidad del ADN</strong>, el <strong>Convenio de Oviedo</strong> y el <strong>Art. 9 del RGPD</strong>.</p>
+          <p style="margin-top:0.6rem;">Blindaste a tus parientes biológicos frente a la genealogía forense no regulada, rechazaste el chantaje asegurador y apostaste por el <strong>cifrado homomórfico</strong>. Tus 3.000 millones de pares de bases continúan perteneciendo únicamente a ti.</p>
+        `;
+        quote.textContent = '"La confidencialidad del genoma es la última frontera de los derechos humanos en el siglo XXI."';
+
+      } else if (totalScore >= 45) {
+        // SILVER TROPHY
+        trophyContainer.innerHTML = `
+          <svg width="80" height="80" viewBox="0 0 16 16" fill="none">
+            <rect x="5" y="2" width="6" height="2" fill="#a0aec0"/>
+            <rect x="4" y="4" width="8" height="4" fill="#cbd5e0"/>
+            <rect x="3" y="4" width="1" height="2" fill="#cbd5e0"/>
+            <rect x="12" y="4" width="1" height="2" fill="#cbd5e0"/>
+            <rect x="6" y="8" width="4" height="2" fill="#cbd5e0"/>
+            <rect x="7" y="10" width="2" height="2" fill="#a0aec0"/>
+            <rect x="5" y="12" width="6" height="2" fill="#4a5568"/>
+            <rect x="7" y="5" width="2" height="2" fill="#00e5ff"/>
+          </svg>
+        `;
+        rankPill.textContent = 'RANGO: INVESTIGADOR CONSCIENTE (PLATA)';
+        rankPill.style.color = '#00e5ff';
+        rankPill.style.borderColor = '#00e5ff';
+        title.textContent = 'DEFENSA ROBUSTA CON FISURAS';
+        narrative.innerHTML = `
+          <p>Buen desempeño ético. Supiste frenar algunas de las trampas comerciales más agresivas, pero permitiste pequeñas filtraciones de metadatos o usos secundarios que podrían comprometer a tus primos y descendientes en bases cruzadas.</p>
+          <p style="margin-top:0.6rem;">El grupo GenoSafe te recuerda: <strong>el anonimato genético absoluto no existe</strong> con más de 30 marcadores microsatélites; la única protección real es la soberanía sobre el dato crudo.</p>
+        `;
+        quote.textContent = '"Una clave informática se cambia; un polimorfismo patógeno te acompaña de la cuna a la tumba."';
+
+      } else {
+        // BRONZE / WARNING TROPHY
+        trophyContainer.innerHTML = `
+          <svg width="80" height="80" viewBox="0 0 16 16" fill="none">
+            <rect x="5" y="2" width="6" height="2" fill="#b7791f"/>
+            <rect x="4" y="4" width="8" height="4" fill="#d69e2e"/>
+            <rect x="6" y="8" width="4" height="2" fill="#d69e2e"/>
+            <rect x="7" y="10" width="2" height="2" fill="#b7791f"/>
+            <rect x="5" y="12" width="6" height="2" fill="#744210"/>
+            <rect x="7" y="5" width="2" height="2" fill="#ff2a2a"/>
+          </svg>
+        `;
+        rankPill.textContent = 'RANGO: PERFIL BIOMÉTRICO EXPUESTO (BRONCE)';
+        rankPill.style.color = '#ff2a2a';
+        rankPill.style.borderColor = '#ff2a2a';
+        title.textContent = 'BRECHA GENÓMICA IRREVOCABLE';
+        narrative.innerHTML = `
+          <p>Has cedido ante la conveniencia de los tests gratuitos y los avatares digitales sin reparar en las consecuencias. Tu mapa genómico completo ahora circula en servidores corporativos desregulados.</p>
+          <p style="margin-top:0.6rem;">Tus hijos y parientes colaterales han quedado expuestos a análisis de susceptibilidad actuarial sin su consentimiento. <strong>¡Repite la simulación con el modelo GenoSafe para blindar tu ADN!</strong></p>
+        `;
+        quote.textContent = '"Quien cede su genoma por un beneficio inmediato hipoteca la privacidad de todas sus generaciones venideras."';
+      }
+    }
+
+    function resetGame() {
+      playBeep('coin');
+      showScene('scene-title');
+    }
+  </script>
+
+</body>
+</html>
