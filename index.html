@@ -19,20 +19,20 @@
        ========================================================================== */
     :root {
       /* [EDITA AQUÍ TUS COLORES] */
-      --color-primario: #0d9488;          /* Color principal (botones, acentos, títulos clave) */
-      --color-primario-hover: #0f766e;    /* Color del botón al pasar el ratón */
-      --color-secundario: #0284c7;        /* Segundo color de apoyo (enlaces, etiquetas) */
-      --color-fondo: #f8fafc;             /* Fondo general de la página */
+      --color-primario: #6b8e6f;          /* Color principal (botones, acentos, títulos clave) */
+      --color-primario-hover: #466049;    /* Color del botón al pasar el ratón */
+      --color-secundario: #c86d51;        /* Segundo color de apoyo (enlaces, etiquetas) */
+      --color-fondo: #fbf8f2;             /* Fondo general de la página */
       --color-superficie: #ffffff;        /* Fondo de tarjetas, bloques y barra superior */
-      --color-superficie-alt: #f1f5f9;    /* Fondo suave alternativo para secciones */
-      --color-texto: #0f172a;             /* Color principal del texto */
-      --color-texto-secundario: #475569;  /* Color de párrafos y textos secundarios */
-      --color-borde: #e2e8f0;             /* Color de líneas divisorias y marcos */
-      --radio-borde: 14px;                /* Redondeo de tarjetas y botones */
-      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+      --color-superficie-alt: #f4efe6;    /* Fondo suave alternativo para secciones */
+      --color-texto: #3d3b37;             /* Color principal del texto */
+      --color-texto-secundario: #7a6e65;  /* Color de párrafos y textos secundarios */
+      --color-borde: #e8e0d5;             /* Color de líneas divisorias y marcos */
+      --radio-borde: 20px;                /* Redondeo de tarjetas y botones */
+      --sombra: 0 10px 25px -5px rgba(107, 142, 111, 0.12), 0 8px 10px -6px rgba(107, 142, 111, 0.05);
     }
 
-    /* Temas preconfigurados para probar combinaciones en vivo */
+    /* Temas preconfigurados para probar combinaciones en vivo 
     [data-tema="azul"] {
       --color-primario: #2563eb;
       --color-primario-hover: #1d4ed8;
@@ -55,19 +55,19 @@
       --color-texto: #064e3b;
       --color-texto-secundario: #374151;
       --color-borde: #dcfce7;
-    }
+    } */
 
     [data-tema="oscuro"] {
-      --color-primario: #14b8a6;
-      --color-primario-hover: #2dd4bf;
-      --color-secundario: #38bdf8;
-      --color-fondo: #090d16;
-      --color-superficie: #111827;
-      --color-superficie-alt: #1f2937;
-      --color-texto: #f9fafb;
-      --color-texto-secundario: #9ca3af;
-      --color-borde: #374151;
-      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      --color-primario: #8bb38f;
+      --color-primario-hover: #a1cca5;
+      --color-secundario: #d9866e;
+      --color-fondo: #262321;
+      --color-superficie: #302c29;
+      --color-superficie-alt: #3d3834;
+      --color-texto: #eee6dc;
+      --color-texto-secundario: #b8ac9f;
+      --color-borde: #4f4843;
+      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
     }
 
     * {
@@ -82,13 +82,15 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Nunito', sans-serif;
       background-color: var(--color-fondo);
       color: var(--color-texto);
       line-height: 1.6;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
-
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Lora', serif;
+    }
     a {
       color: var(--color-primario);
       text-decoration: none;
