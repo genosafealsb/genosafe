@@ -19,17 +19,17 @@
        ========================================================================== */
     :root {
       /* [EDITA AQUÍ TUS COLORES] */
-      --color-primario: #6b8e6f;          /* Color principal (botones, acentos, títulos clave) */
-      --color-primario-hover: #466049;    /* Color del botón al pasar el ratón */
-      --color-secundario: #c86d51;        /* Segundo color de apoyo (enlaces, etiquetas) */
-      --color-fondo: #fbf8f2;             /* Fondo general de la página */
+      --color-primario: #8b5cf6;          /* Color principal (botones, acentos, títulos clave) */
+      --color-primario-hover: #7c3aed;    /* Color del botón al pasar el ratón */
+      --color-secundario: #10b981;        /* Segundo color de apoyo (enlaces, etiquetas) */
+      --color-fondo: #f5f3ff;             /* Fondo general de la página */
       --color-superficie: #ffffff;        /* Fondo de tarjetas, bloques y barra superior */
-      --color-superficie-alt: #f4efe6;    /* Fondo suave alternativo para secciones */
-      --color-texto: #3d3b37;             /* Color principal del texto */
-      --color-texto-secundario: #7a6e65;  /* Color de párrafos y textos secundarios */
-      --color-borde: #e8e0d5;             /* Color de líneas divisorias y marcos */
-      --radio-borde: 20px;                /* Redondeo de tarjetas y botones */
-      --sombra: 0 10px 25px -5px rgba(107, 142, 111, 0.12), 0 8px 10px -6px rgba(107, 142, 111, 0.05);
+      --color-superficie-alt: #ede9fe;    /* Fondo suave alternativo para secciones */
+      --color-texto: #1e1b4b;             /* Color principal del texto */
+      --color-texto-secundario: #5b21b6;  /* Color de párrafos y textos secundarios */
+      --color-borde: #ddd6fe;             /* Color de líneas divisorias y marcos */
+      --radio-borde: 16px;                /* Redondeo de tarjetas y botones */
+      --sombra: 0 10px 25px -5px rgba(139, 92, 246, 0.15), 0 8px 10px -6px rgba(139, 92, 246, 0.1);
     }
 
     /* Temas preconfigurados para probar combinaciones en vivo 
@@ -58,19 +58,20 @@
     } */
 
     [data-tema="oscuro"] {
-      --color-primario: #8bb38f;
-      --color-primario-hover: #a1cca5;
-      --color-secundario: #d9866e;
-      --color-fondo: #262321;
-      --color-superficie: #302c29;
-      --color-superficie-alt: #3d3834;
-      --color-texto: #eee6dc;
-      --color-texto-secundario: #b8ac9f;
-      --color-borde: #4f4843;
-      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+      --color-primario: #a78bfa;          /* Color principal (botones, acentos, títulos clave) */
+      --color-primario-hover: #c4b5fd;    /* Color del botón al pasar el ratón */
+      --color-secundario: #34d399;        /* Segundo color de apoyo (enlaces, etiquetas) */
+      --color-fondo: #0f172a;             /* Fondo general de la página */
+      --color-superficie: #1e293b;        /* Fondo de tarjetas, bloques y barra superior */
+      --color-superficie-alt: #312e81;    /* Fondo suave alternativo para secciones */
+      --color-texto: #f8fafc;             /* Color principal del texto */
+      --color-texto-secundario: #cbd5e1;  /* Color de párrafos y textos secundarios */
+      --color-borde: #334155;             /* Color de líneas divisorias y marcos */
+      --radio-borde: 20px;                /* Redondeo de tarjetas y botones */
+      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
     }
 
-    * {
+     {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -533,7 +534,7 @@
        ======================================================================== -->
   <div class="selector-tema">
     <span>💡</span>
-    <button class="btn-color" onclick="cambiarTema('teal')">
+    <!-- <button class="btn-color" onclick="cambiarTema('teal')">
       <span class="circulo-muestra" style="background:#0d9488;"></span> Verde Azulado
     </button>
     <button class="btn-color" onclick="cambiarTema('azul')">
@@ -541,7 +542,7 @@
     </button>
     <button class="btn-color" onclick="cambiarTema('verde')">
       <span class="circulo-muestra" style="background:#059669;"></span> Bioética Verde
-    </button>
+    </button> -->
     <button class="btn-color" onclick="cambiarTema('oscuro')">
       <span class="circulo-muestra" style="background:#111827;"></span> Modo Oscuro
     </button>
