@@ -3,75 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GenoSafe | Confidencialidad y Privacidad Genómica</title>
+  <title>GenoSafe | Privacidad y ADN</title>
   
-  <!-- Fuente tipográfica moderna 'Inter' desde Google Fonts -->
+  <!-- Tipografías Minimalismo Editorial -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
     /* ==========================================================================
-       1. PALETA DE COLORES EDITABLE (VARIABLES CSS)
-       --------------------------------------------------------------------------
-       Puedes modificar estos códigos hexadecimales (#...) por los colores que
-       más te gusten para tu trabajo.
+       1. PALETA MINIMALISMO EDITORIAL
        ========================================================================== */
     :root {
-      /* [EDITA AQUÍ TUS COLORES] */
-      --color-primario: #8b5cf6;          /* Color principal (botones, acentos, títulos clave) */
-      --color-primario-hover: #7c3aed;    /* Color del botón al pasar el ratón */
-      --color-secundario: #10b981;        /* Segundo color de apoyo (enlaces, etiquetas) */
-      --color-fondo: #f5f3ff;             /* Fondo general de la página */
-      --color-superficie: #ffffff;        /* Fondo de tarjetas, bloques y barra superior */
-      --color-superficie-alt: #ede9fe;    /* Fondo suave alternativo para secciones */
-      --color-texto: #1e1b4b;             /* Color principal del texto */
-      --color-texto-secundario: #5b21b6;  /* Color de párrafos y textos secundarios */
-      --color-borde: #ddd6fe;             /* Color de líneas divisorias y marcos */
-      --radio-borde: 16px;                /* Redondeo de tarjetas y botones */
-      --sombra: 0 10px 25px -5px rgba(139, 92, 246, 0.15), 0 8px 10px -6px rgba(139, 92, 246, 0.1);
+      --color-fondo: #ffffff;
+      --color-texto: #111827;
+      --color-texto-suave: #4b5563;
+      --color-acento: #0f172a; /* Azul noche muy oscuro */
+      --color-borde: #e5e7eb;
+      --color-hover: #f3f4f6;
     }
 
-    /* Temas preconfigurados para probar combinaciones en vivo 
-    [data-tema="azul"] {
-      --color-primario: #2563eb;
-      --color-primario-hover: #1d4ed8;
-      --color-secundario: #0891b2;
-      --color-fondo: #f8fafc;
-      --color-superficie: #ffffff;
-      --color-superficie-alt: #f1f5f9;
-      --color-texto: #0f172a;
-      --color-texto-secundario: #475569;
-      --color-borde: #e2e8f0;
-    }
-
-    [data-tema="verde"] {
-      --color-primario: #059669;
-      --color-primario-hover: #047857;
-      --color-secundario: #10b981;
-      --color-fondo: #fbfdfc;
-      --color-superficie: #ffffff;
-      --color-superficie-alt: #f0fdf4;
-      --color-texto: #064e3b;
-      --color-texto-secundario: #374151;
-      --color-borde: #dcfce7;
-    } */
-
-    [data-tema="oscuro"] {
-      --color-primario: #a78bfa;          /* Color principal (botones, acentos, títulos clave) */
-      --color-primario-hover: #c4b5fd;    /* Color del botón al pasar el ratón */
-      --color-secundario: #34d399;        /* Segundo color de apoyo (enlaces, etiquetas) */
-      --color-fondo: #0f172a;             /* Fondo general de la página */
-      --color-superficie: #1e293b;        /* Fondo de tarjetas, bloques y barra superior */
-      --color-superficie-alt: #312e81;    /* Fondo suave alternativo para secciones */
-      --color-texto: #f8fafc;             /* Color principal del texto */
-      --color-texto-secundario: #cbd5e1;  /* Color de párrafos y textos secundarios */
-      --color-borde: #334155;             /* Color de líneas divisorias y marcos */
-      --radio-borde: 20px;                /* Redondeo de tarjetas y botones */
-      --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-    }
-
-     {
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -86,20 +38,24 @@
       font-family: 'Nunito', sans-serif;
       background-color: var(--color-fondo);
       color: var(--color-texto);
-      line-height: 1.6;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
+
     h1, h2, h3, h4, h5, h6 {
-      font-family: 'Lora', serif;
+      font-family: 'Playfair Display', serif;
+      color: var(--color-acento);
     }
+
     a {
-      color: var(--color-primario);
+      color: var(--color-acento);
       text-decoration: none;
-      transition: color 0.2s ease;
+      transition: color 0.2s ease, opacity 0.2s ease;
     }
 
     a:hover {
-      color: var(--color-primario-hover);
+      opacity: 0.7;
     }
 
     .contenedor {
@@ -108,55 +64,11 @@
       padding: 0 1.5rem;
     }
 
-    /* Barra flotante para cambiar tema en vivo */
-    .selector-tema {
-      background: var(--color-superficie);
-      border-bottom: 1px solid var(--color-borde);
-      padding: 0.6rem 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-      font-size: 0.82rem;
-      color: var(--color-texto-secundario);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-    }
-
-    .btn-color {
-      border: 1px solid var(--color-borde);
-      background: var(--color-superficie-alt);
-      color: var(--color-texto);
-      padding: 0.3rem 0.75rem;
-      border-radius: 999px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: all 0.2s;
-    }
-
-    .btn-color:hover {
-      border-color: var(--color-primario);
-    }
-
-    .circulo-muestra {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
     /* Barra de navegación */
     header.barra-navegacion {
-      background-color: var(--color-superficie);
+      background-color: var(--color-fondo);
       border-bottom: 1px solid var(--color-borde);
-      padding: 1.1rem 0;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      padding: 1.5rem 0;
     }
 
     .nav-contenido {
@@ -168,83 +80,85 @@
     }
 
     .logo-grupo {
-      font-weight: 800;
-      font-size: 1.35rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.6rem;
       letter-spacing: -0.5px;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: var(--color-texto);
+      color: var(--color-acento);
     }
 
     .logo-icono {
       width: 32px;
       height: 32px;
-      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
-      border-radius: 8px;
+      background: var(--color-acento);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
+      font-family: 'Nunito', sans-serif;
       font-size: 0.9rem;
       font-weight: bold;
     }
 
     nav.enlaces-nav {
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       list-style: none;
-      font-size: 0.92rem;
-      font-weight: 500;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     nav.enlaces-nav a {
-      color: var(--color-texto-secundario);
+      color: var(--color-texto-suave);
     }
 
     nav.enlaces-nav a:hover {
-      color: var(--color-primario);
+      color: var(--color-acento);
     }
 
     /* Portada / Hero */
     .hero {
-      padding: 5rem 0 4rem;
+      padding: 6rem 0 5rem;
       text-align: center;
       position: relative;
     }
 
     .etiqueta-academica {
       display: inline-block;
-      padding: 0.35rem 0.9rem;
-      background-color: var(--color-superficie-alt);
+      padding: 0.35rem 1rem;
+      background-color: var(--color-hover);
       border: 1px solid var(--color-borde);
-      color: var(--color-primario);
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 999px;
+      color: var(--color-texto-suave);
+      font-size: 0.75rem;
+      font-weight: 700;
       margin-bottom: 1.5rem;
-      letter-spacing: 0.5px;
+      letter-spacing: 2px;
       text-transform: uppercase;
     }
 
     .hero-titulo {
-      font-size: 2.75rem;
-      font-weight: 800;
+      font-size: 3.5rem;
+      font-weight: 700;
       line-height: 1.15;
       letter-spacing: -1px;
-      margin-bottom: 1.25rem;
-      color: var(--color-texto);
+      margin-bottom: 1.5rem;
+      color: var(--color-acento);
     }
 
     .hero-titulo span {
-      color: var(--color-primario);
+      font-style: italic;
     }
 
     .hero-subtitulo {
-      font-size: 1.2rem;
-      color: var(--color-texto-secundario);
-      max-width: 780px;
-      margin: 0 auto 2.2rem;
+      font-size: 1.15rem;
+      color: var(--color-texto-suave);
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
       font-weight: 400;
     }
 
@@ -259,45 +173,44 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 0.75rem 1.6rem;
-      border-radius: var(--radio-borde);
+      padding: 0.85rem 2rem;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
     }
 
     .btn-principal {
-      background-color: var(--color-primario);
+      background-color: var(--color-acento);
       color: #ffffff;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+      border-color: var(--color-acento);
     }
 
     .btn-principal:hover {
-      background-color: var(--color-primario-hover);
-      color: #ffffff;
-      transform: translateY(-2px);
+      background-color: transparent;
+      color: var(--color-acento);
     }
 
     .btn-secundario {
-      background-color: var(--color-superficie);
-      color: var(--color-texto);
+      background-color: transparent;
+      color: var(--color-acento);
       border: 1px solid var(--color-borde);
     }
 
     .btn-secundario:hover {
-      background-color: var(--color-superficie-alt);
-      transform: translateY(-2px);
+      background-color: var(--color-hover);
     }
 
     /* Secciones generales */
     section.seccion {
-      padding: 4.5rem 0;
+      padding: 5rem 0;
     }
 
     section.seccion-alt {
-      background-color: var(--color-superficie-alt);
+      background-color: var(--color-hover);
       border-top: 1px solid var(--color-borde);
       border-bottom: 1px solid var(--color-borde);
     }
@@ -305,153 +218,158 @@
     .cabecera-seccion {
       text-align: center;
       max-width: 650px;
-      margin: 0 auto 3rem;
+      margin: 0 auto 3.5rem;
     }
 
     .subtitulo-seccion {
-      color: var(--color-primario);
-      font-size: 0.85rem;
+      color: var(--color-texto-suave);
+      font-size: 0.8rem;
       text-transform: uppercase;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       margin-bottom: 0.5rem;
       display: block;
     }
 
     .titulo-seccion {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 700;
-      color: var(--color-texto);
+      color: var(--color-acento);
       letter-spacing: -0.5px;
     }
 
     .descripcion-seccion {
-      color: var(--color-texto-secundario);
-      margin-top: 0.75rem;
-      font-size: 1rem;
+      color: var(--color-texto-suave);
+      margin-top: 1rem;
+      font-size: 1.05rem;
     }
 
     /* Bloque 'Sobre el proyecto' */
     .caja-resumen {
-      background: var(--color-superficie);
+      background: var(--color-fondo);
       border: 1px solid var(--color-borde);
-      border-radius: var(--radio-borde);
-      padding: 2.2rem;
-      box-shadow: var(--sombra);
+      padding: 3rem;
       margin-bottom: 2rem;
     }
 
     .caja-resumen p {
-      color: var(--color-texto-secundario);
-      margin-bottom: 1.2rem;
+      color: var(--color-texto-suave);
+      margin-bottom: 1.5rem;
     }
 
     .caja-resumen p:last-child {
       margin-bottom: 0;
     }
 
+    .caja-resumen strong {
+      color: var(--color-acento);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+    }
+
     /* Cuadrículas y Tarjetas de temas */
     .cuadricula-tarjetas {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
     .tarjeta {
-      background-color: var(--color-superficie);
+      background-color: var(--color-fondo);
       border: 1px solid var(--color-borde);
-      border-radius: var(--radio-borde);
-      padding: 1.8rem;
-      box-shadow: var(--sombra);
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      padding: 2.5rem;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
     }
 
     .tarjeta:hover {
-      transform: translateY(-4px);
-      border-color: var(--color-primario);
+      transform: translateY(-5px);
+      border-color: var(--color-acento);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
     }
 
     .icono-tarjeta {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background-color: var(--color-superficie-alt);
-      color: var(--color-primario);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.25rem;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--color-acento);
     }
 
     .tarjeta h3 {
-      font-size: 1.2rem;
-      margin-bottom: 0.6rem;
-      color: var(--color-texto);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
     }
 
     .tarjeta p {
-      font-size: 0.92rem;
-      color: var(--color-texto-secundario);
-      line-height: 1.55;
+      font-size: 0.95rem;
+      color: var(--color-texto-suave);
     }
 
     /* Miembros del equipo */
     .cuadricula-equipo {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
     .tarjeta-miembro {
-      background: var(--color-superficie);
+      background: var(--color-fondo);
       border: 1px solid var(--color-borde);
-      border-radius: var(--radio-borde);
-      padding: 1.8rem 1.2rem;
+      padding: 2rem 1.5rem;
       text-align: center;
-      box-shadow: var(--sombra);
-      transition: transform 0.2s ease;
+      transition: transform 0.3s ease;
     }
 
     .tarjeta-miembro:hover {
-      transform: translateY(-3px);
+      transform: translateY(-5px);
     }
 
     .avatar-miembro {
-      width: 78px;
-      height: 78px;
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
-      color: white;
-      font-size: 1.5rem;
+      object-fit: cover;
+      background: var(--color-hover);
+      border: 1px solid var(--color-borde);
+      color: var(--color-acento);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 1.1rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 0 auto 1.5rem;
     }
 
     .nombre-miembro {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--color-texto);
-      margin-bottom: 0.2rem;
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
     }
 
     .rol-miembro {
-      font-size: 0.82rem;
-      color: var(--color-primario);
-      font-weight: 600;
-      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--color-texto-suave);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 1rem;
       display: block;
     }
 
     .desc-miembro {
-      font-size: 0.82rem;
-      color: var(--color-texto-secundario);
+      font-size: 0.9rem;
+      color: var(--color-texto-suave);
+      margin-bottom: 1rem;
+    }
+    
+    .btn-jugar {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--color-acento);
+      padding-bottom: 2px;
+      display: inline-block;
+      margin-top: 0.5rem;
     }
 
     /* Lista bibliográfica / Recursos */
@@ -459,46 +377,41 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.5rem;
     }
 
     .item-recurso {
-      background: var(--color-superficie);
+      background: var(--color-fondo);
       border: 1px solid var(--color-borde);
-      border-radius: var(--radio-borde);
-      padding: 1.25rem 1.5rem;
+      padding: 1.5rem 2rem;
       display: flex;
       align-items: flex-start;
-      gap: 1rem;
+      gap: 1.5rem;
     }
 
     .num-recurso {
-      background: var(--color-superficie-alt);
-      color: var(--color-primario);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
+      color: var(--color-texto-suave);
+      font-size: 0.9rem;
       font-weight: bold;
-      padding: 0.2rem 0.55rem;
-      border-radius: 6px;
-      border: 1px solid var(--color-borde);
       flex-shrink: 0;
+      margin-top: 2px;
     }
 
     .texto-recurso {
-      font-size: 0.92rem;
-      color: var(--color-texto-secundario);
+      font-size: 0.95rem;
+      color: var(--color-texto-suave);
     }
 
     .texto-recurso strong {
-      color: var(--color-texto);
+      color: var(--color-acento);
     }
 
     footer.pie-pagina {
-      background-color: var(--color-superficie);
+      background-color: var(--color-fondo);
       border-top: 1px solid var(--color-borde);
-      padding: 3rem 0 2rem;
+      padding: 4rem 0 3rem;
       font-size: 0.85rem;
-      color: var(--color-texto-secundario);
+      color: var(--color-texto-suave);
     }
 
     .pie-contenido {
@@ -506,19 +419,19 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 1.5rem;
+      gap: 2rem;
     }
 
-    /* Responsividad en pantallas pequeñas */
+    /* Responsividad */
     @media (max-width: 768px) {
       .hero-titulo {
-        font-size: 2.1rem;
+        font-size: 2.5rem;
       }
       .hero-subtitulo {
-        font-size: 1.05rem;
+        font-size: 1rem;
       }
       nav.enlaces-nav {
-        display: none; /* Simplificado para móviles */
+        display: none;
       }
       .pie-contenido {
         flex-direction: column;
@@ -530,44 +443,24 @@
 <body>
 
   <!-- ========================================================================
-       BARRA SUPERIOR: SELECTOR DE TEMAS EN VIVO (Para que pruebes colores)
-       ======================================================================== -->
-  <div class="selector-tema">
-    <span>💡</span>
-    <!-- <button class="btn-color" onclick="cambiarTema('teal')">
-      <span class="circulo-muestra" style="background:#0d9488;"></span> Verde Azulado
-    </button>
-    <button class="btn-color" onclick="cambiarTema('azul')">
-      <span class="circulo-muestra" style="background:#2563eb;"></span> Azul Médico
-    </button>
-    <button class="btn-color" onclick="cambiarTema('verde')">
-      <span class="circulo-muestra" style="background:#059669;"></span> Bioética Verde
-    </button> -->
-    <button class="btn-color" onclick="cambiarTema('oscuro')">
-      <span class="circulo-muestra" style="background:#111827;"></span> Modo Oscuro
-    </button>
-  </div>
-
-  <!-- ========================================================================
        SECCIÓN 1: BARRA DE NAVEGACIÓN
        ======================================================================== -->
   <header class="barra-navegacion">
     <div class="contenedor nav-contenido">
       
-      <!-- [EDITA AQUÍ]: Nombre y logo de tu grupo -->
+      <!-- Logo del grupo -->
       <a href="#inicio" class="logo-grupo">
-        <div class="logo-icono">GS</div>
         <span>GenoSafe</span>
       </a>
 
-      <!-- [EDITA AQUÍ]: Enlaces del menú superior -->
+      <!-- Enlaces del menú superior -->
       <nav>
-        <ul class="enlaces-nav" style="display: flex; list-style: none; gap: 20px; margin: 0; padding:0;">
-          <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#proyecto">Proyecto</a></li>
-          <li><a href="#temas">Puntos Clave</a></li>
-          <li><a href="#equipo">Equipo</a></li>
-          <li><a href="#bibliografia">Bibliografía</a></li>
+        <ul class="enlaces-nav">
+          <a href="#inicio">Inicio</a>
+          <a href="#proyecto">Proyecto</a>
+          <a href="#temas">Investigación</a>
+          <a href="#equipo">Equipo</a>
+          <a href="#bibliografia">Fuentes</a>
         </ul>
       </nav>
 
@@ -575,38 +468,34 @@
   </header>
 
   <!-- ========================================================================
-       SECCIÓN 2: PORTADA / HERO (Encabezado principal de la web)
+       SECCIÓN 2: PORTADA / HERO 
        ======================================================================== -->
   <section id="inicio" class="hero">
     <div class="contenedor">
       
-      <!-- [EDITA AQUÍ]: Asignatura, curso o titulación académica -->
       <span class="etiqueta-academica">
         Trabajo Académico • Curso 2026-2027
       </span>
 
-      <!-- [EDITA AQUÍ]: Título principal de tu proyecto -->
       <h1 class="hero-titulo">
         Confidencialidad y Privacidad en la <span>Información Genética</span>
       </h1>
 
-      <!-- [EDITA AQUÍ]: Subtítulo o resumen del trabajo en una o dos líneas -->
       <p class="hero-subtitulo">
-        Investigación bioética, jurídica sobre la confidencialidad de la información genética y un trabajo académico de divulgación sobre cómo proteger tus datos genéticos para evitar correr riesgos innecesarios.
+        Investigación bioética y jurídica sobre la confidencialidad de la información genética y un proyecto de divulgación sobre cómo proteger tus datos para evitar riesgos innecesarios.
       </p>
 
-      <!-- [EDITA AQUÍ]: Botones principales de acción -->
       <div class="grupo-botones">
         <a href="#proyecto" class="btn btn-principal">Conoce el Proyecto</a>
-        <a href="#temas" class="btn btn-secundario">Ver Puntos a Tratar</a>
-        <a href="#seccion-juegos" class="btn btn-secundario">🎮 Zona Juegos </a>
+        <a href="#temas" class="btn btn-secundario">Puntos a Tratar</a>
+        <a href="#seccion-juegos" class="btn btn-secundario">Zona Juegos </a>
       </div>
 
     </div>
   </section>
 
   <!-- ========================================================================
-       SECCIÓN 3: SOBRE EL PROYECTO / INTRODUCCIÓN TEÓRICA
+       SECCIÓN 3: SOBRE EL PROYECTO
        ======================================================================== -->
   <section id="proyecto" class="seccion seccion-alt">
     <div class="contenedor">
@@ -615,17 +504,16 @@
         <span class="subtitulo-seccion">Contexto y Objetivos</span>
         <h2 class="titulo-seccion">¿Por qué nace GenoSafe?</h2>
         <p class="descripcion-seccion">
-        GenoSafe nade de la necesidad de divulgar y analizar algo tan simple como la protección y conciencia que tenemos sobre el trato que se le dan a nuestra información genética.
+        GenoSafe nace de la necesidad de divulgar y analizar la protección y consciencia que tenemos sobre el trato que se le da a nuestra información genética.
         </p>
       </div>
 
-      <!-- [EDITA AQUÍ]: Redacta aquí la introducción o marco teórico de tu grupo -->
       <div class="caja-resumen">
         <p>
           <strong>Quiénes somos:</strong> Somos 6 estudiantes de la Universidad de Miguel Hernández cursando el cuarto año del Grado de Biotecnología, matriculadas en la asignatura de Aspectos Legales y Sociales de la Biotecnología. Nuestro objetivo es haceros llegar los conocimientos sobre cómo se tratan nuestros datos, qué es la confidencialidad genética, qué leyes protegen esta información y cuándo o dónde podemos estar poniéndola en peligro.
         </p>
         <p>
-          <strong>Objetivo:</strong> Con este trabajo, nuestro grupo <strong>GenoSafe</strong> no solo busca que nuestro público entre aquí y lea una cantidad determinada de palabras sino que realmente entienda nuestro propósito, se hagan partícipe de él y aprendamos todos juntos de forma interactiva con diferentes actividades cercanas y divulgativas sobre cómo podemos estar protegidos de algo que se puede salir fácilmente de nuestro contro aún que sea única y exclusivamente nuestro.
+          <strong>Objetivo:</strong> Con este trabajo, nuestro grupo <strong>GenoSafe</strong> no solo busca que nuestro público entre aquí y lea una cantidad determinada de palabras, sino que realmente entienda nuestro propósito, se haga partícipe de él y aprendamos juntos de forma interactiva con actividades cercanas y divulgativas.
         </p>
           <p>
             Así, el grupo <strong>GenoSafe</strong> busca analizar cómo compatibilizar el necesario avance de la medicina personalizada y la investigación científica con el respeto adecuado y fundamental a los derechos humanos y la protección de datos.
@@ -636,7 +524,7 @@
   </section>
 
   <!-- ========================================================================
-       SECCIÓN 4: TARJETAS DE TEMAS CLAVE / PUNTOS A TRATAR
+       SECCIÓN 4: TARJETAS DE TEMAS CLAVE 
        ======================================================================== -->
   <section id="temas" class="seccion">
     <div class="contenedor">
@@ -651,39 +539,35 @@
 
       <div class="cuadricula-tarjetas">
         
-        <!-- [EDITA AQUÍ]: Tarjeta 1 -->
         <article class="tarjeta">
-          <div class="icono-tarjeta">🔒</div>
-          <h3>1. Divulgación científica</h3>
+          <div class="icono-tarjeta">I.</div>
+          <h3>Divulgación científica</h3>
           <p>
-            Nuestro mayor logro siempre será hacer llegar la ciencia a rincones donde no había llegado y era necesaria. Esto surge de la necesidad de proteger a nuestros familiares, amigos, conocidos o desconocidos que no aplican ni estudian la ciencia como un biotecnólogo pero sí tienen el derecho a estar igual de informados de lo que ocurre a su alrededor con un vocabulario adecuado y entendible.
+            Nuestro mayor logro siempre será hacer llegar la ciencia a rincones donde no había llegado y era necesaria. Esto surge de la necesidad de proteger a quienes no estudian ciencia, pero tienen derecho a estar informados de lo que ocurre con su ADN.
           </p>
         </article>
 
-        <!-- [EDITA AQUÍ]: Tarjeta 2 -->
         <article class="tarjeta">
-          <div class="icono-tarjeta">⚖️</div>
-          <h3>2. Estudio estadístico</h3>
+          <div class="icono-tarjeta">II.</div>
+          <h3>Estudio estadístico</h3>
           <p>
-            Estudiaremos cómo de común es conocer nuestros derechos sobre nuestra propia información genética, cuánto conoce la gente sobre la confidencialidad genética, cómo protegernos o quién nos tiene que proteger sobre este tema, para todo ello tenemos un código QR con una encuesta donde podéis participar y ayudarnos a conocer cuánto sabéis y cómo podemos enfocar nuestra divulgación.
+            Estudiaremos cómo de común es conocer nuestros derechos genéticos mediante una encuesta para averiguar cuánto sabe la población general.
           </p>
         </article>
 
-        <!-- [EDITA AQUÍ]: Tarjeta 3 -->
         <article class="tarjeta">
-          <div class="icono-tarjeta">🛡️</div>
-          <h3>3. Ejemplos reales</h3>
+          <div class="icono-tarjeta">III.</div>
+          <h3>Ejemplos reales</h3>
           <p>
-            Propondremos ejemplos reales de dónde podemos correr riesgos, en nuestras redes sociales como <a href="https://www.instagram.com/genosafe/">Instagram</a> y <a href="https://www.tiktok.com/@genosafe1">TikTok</a> donde tendréis a vuestra disposición contenido divulgativo: ilustrativo, audiovisual, cotidiano... donde podréis aprender con nosotras todo lo que necesitáis saber.
+            Propondremos ejemplos reales donde podemos correr riesgos, disponibles en nuestras redes sociales como <a href="https://www.instagram.com/genosafe/">Instagram</a> y <a href="https://www.tiktok.com/@genosafe1">TikTok</a>, con contenido divulgativo y audiovisual.
           </p>
         </article>
 
-        <!-- [EDITA AQUÍ]: Tarjeta 4 -->
         <article class="tarjeta">
-          <div class="icono-tarjeta">🧬</div>
-          <h3>4. Trata la información genética</h3>
+          <div class="icono-tarjeta">IV.</div>
+          <h3>Tratamiento de la información</h3>
           <p>
-            Proponer nuevas formas de tratar la información de nuestro material genético de una forma segura, más ética y donde el consumidor o persona cotidiana, que nada tiene que ver con la ciencia ni la empresa, pueda llegar a comprender.
+            Proponer nuevas formas de tratar el material genético de forma segura y ética, comprensible para el consumidor o persona cotidiana ajena a la ciencia y la empresa.
           </p>
         </article>
 
@@ -694,46 +578,37 @@
    <!-- ========================================================================
        SECCIÓN 5: JUEGOS INTERACTIVOS
        ======================================================================== -->
-  <section id="seccion-juegos" class="seccion">
+  <section id="seccion-juegos" class="seccion seccion-alt">
     <div class="contenedor">
       
-      <div class="cabecara-seccion">
-        <span class="subtitulo-seccion">Juegos interactivos</span>
+      <div class="cabecera-seccion">
+        <span class="subtitulo-seccion">Zona Juegos</span>
         <h2 class="titulo-seccion">Aprende Jugando</h2>
         <p class="descripcion-seccion">Aprende sobre la confidencialidad de tu información genética mediante nuestras experiencias interactivas.</p>
       </div>
 
       <div class="cuadricula-equipo">
-    <!-- Juego 1: La Aldea -->
         <div class="tarjeta-miembro">
-          <div class="avatar-miembro">🌿</div>
-          <h3 class="nombre-mimebro">La Aldea</h3>
-          <p class="desc-miembro">Explora un pueblo interactivo, crea tu avatar y resuelve dilemas sobre privacidad genética con los aldeanos.
-          <a href="aldea_bioetica.html" class="btn-jugar">Jugar ahora ➔</a></p>
+          <div class="avatar-miembro">🏡</div>
+          <h3 class="nombre-miembro">La Aldea</h3>
+          <p class="desc-miembro">Explora un pueblo interactivo, crea tu avatar y resuelve dilemas sobre privacidad genética con los aldeanos.</p>
+          <a href="aldea_bioetica.html" class="btn-jugar">Jugar ahora ➔</a>
         </div>
 
-    <!-- Juego 2: El Invernadero -->
         <div class="tarjeta-miembro">
-          <div class="avatar-miembro">👾</div>
+          <div class="avatar-miembro">🕹️</div>
           <h3 class="nombre-miembro">Arcade Bioético</h3>
-          <p class="desc-miembro">Escoge tu respuesta y aprende de tus errores.
-          <a href="bioethics_arcade.html" class="btn-jugar">Jugar ahora ➔</a></p>
+          <p class="desc-miembro">Escoge tu respuesta ante diferentes situaciones legales y aprende de tus errores interactuando.</p>
+          <a href="bioethics_arcade.html" class="btn-jugar">Jugar ahora ➔</a>
         </div>
-
-    <!-- Juego 3: Simulador Básico 
-    <div class="juego-card">
-      <div class="juego-icono">⚖️</div>
-      <h3>Simulador de Decisiones</h3>
-      <p>Toma el control de tu ADN y enfréntate a casos reales sobre aseguradoras y bases de datos comerciales.</p>
-      <a href="juego.html" class="btn-jugar">Jugar ahora ➔</a>
-    </div> -->
+      </div>
   </div>
   </section> 
   
   <!-- ========================================================================
        SECCIÓN 6: MIEMBROS DEL EQUIPO
        ======================================================================== -->
-  <section id="equipo" class="seccion seccion-alt">
+  <section id="equipo" class="seccion">
     <div class="contenedor">
       
       <div class="cabecera-seccion">
@@ -745,54 +620,36 @@
       </div>
 
       <div class="cuadricula-equipo">
-        
-        <!-- [EDITA AQUÍ]: Miembro 1 -->
         <div class="tarjeta-miembro">
-          <!-- Si tienes foto real, puedes cambiar el <div> por: <img src="ruta/foto.jpg" class="avatar-miembro" style="object-fit:cover;"> -->
-          <div class="avatar-miembro">A1</div>
+          <img src="khaoula.jpeg" alt="Khaoula Halhali" class="avatar-miembro">
           <h3 class="nombre-miembro">Khaoula Halhali Berjal</h3>
-       <!-- <span class="rol-miembro">Bioinformática y Análisis</span>
-          <p class="desc-miembro">Encargado del estudio sobre secuenciación masiva (NGS) y formato de ficheros genéticos.</p> -->
         </div> 
 
-        <!-- [EDITA AQUÍ]: Miembro 2 -->
         <div class="tarjeta-miembro">
-          <div class="avatar-miembro">A2</div>
+          <img src="lorena.jpeg" alt="Lorena Gelardo" class="avatar-miembro">
           <h3 class="nombre-miembro">Lorena Gelardo Juárez</h3>
-        <!--  <span class="rol-miembro">Derecho Digital y Bioética</span>
-          <p class="desc-miembro">Responsable del marco regulatorio (RGPD Art. 9) y consentimientos informados.</p> -->
         </div> 
 
-        <!-- [EDITA AQUÍ]: Miembro 3 -->
         <div class="tarjeta-miembro">
-          <div class="avatar-miembro">A3</div>
+          <img src="marta.jpeg" alt="Marta Ruiz" class="avatar-miembro">
           <h3 class="nombre-miembro">Marta Ruiz Gelardo</h3>
-      <!--    <span class="rol-miembro">Ciberseguridad y Datos</span>
-          <p class="desc-miembro">Estudio de criptografía aplicada, cifrado homomórfico y trazabilidad de accesos.</p> -->
         </div> 
 
-        <!-- [EDITA AQUÍ]: Miembro 4 -->
         <div class="tarjeta-miembro">
-          <div class="avatar-miembro">A4</div>
+          <img src="amaia.jpeg" alt="Amaia Callejo" class="avatar-miembro">
           <h3 class="nombre-miembro">Amaia Callejo Rouse</h3>
-        <!--  <span class="rol-miembro">Coordinación y Documentación</span>
-          <p class="desc-miembro">Redacción de conclusiones, diseño de la presentación y preparación de bibliografía.</p> -->
         </div>
 
-         <!-- [EDITA AQUÍ]: Miembro 5 -->
         <div class="tarjeta-miembro">
-          <div class="avatar-miembro">A2</div>
+          <img src="alma.jpeg" alt="Alma Abellón" class="avatar-miembro">
           <h3 class="nombre-miembro">Alma Abellón Rabasco</h3>
           <span class="rol-miembro">Coordinadora de grupo</span>
-          <p class="desc-miembro">Responsable de la organización y presentación del proyecto.</p> -->
+          <p class="desc-miembro">Responsable de la organización y presentación del proyecto.</p>
         </div>
         
-        <!-- [EDITA AQUÍ]: Miembro 6 -->
         <div class="tarjeta-miembro">
-          <div class="avatar-miembro">A2</div>
+          <img src="fatin.jpeg" alt="Fatin Chhabri" class="avatar-miembro">
           <h3 class="nombre-miembro">Fatin Chhabri Hamioukatou</h3>
-       <!--   <span class="rol-miembro">Derecho Digital y Bioética</span>
-          <p class="desc-miembro">Responsable del marco regulatorio (RGPD Art. 9) y consentimientos informados.</p> -->
         </div>
       </div>
     </div>
@@ -801,7 +658,7 @@
   <!-- ========================================================================
        SECCIÓN 7: RECURSOS Y BIBLIOGRAFÍA ACADÉMICA
        ======================================================================== -->
-  <section id="bibliografia" class="seccion">
+  <section id="bibliografia" class="seccion seccion-alt">
     <div class="contenedor">
       
       <div class="cabecera-seccion">
@@ -812,37 +669,34 @@
         </p>
       </div>
 
-      <!-- [EDITA AQUÍ]: Añade o modifica los libros/artículos que habéis consultado -->
       <ul class="lista-recursos">
-        
         <li class="item-recurso">
-          <span class="num-recurso">[01]</span>
+          <span class="num-recurso">01.</span>
           <div class="texto-recurso">
-            <strong>National Human Genome Research Institute (NHGRI / NIH) (2020):</strong> <em> Ley de No Discriminación por Información Genética (GINA).</em>. National Institutes of Health, EE. UU.
+            <strong>National Human Genome Research Institute (NHGRI / NIH) (2020):</strong> <em> Ley de No Discriminación por Información Genética (GINA).</em> National Institutes of Health, EE. UU.
           </div>
         </li>
 
         <li class="item-recurso">
-          <span class="num-recurso">[02]</span>
+          <span class="num-recurso">02.</span>
           <div class="texto-recurso">
             <strong>Jefatura del Estado (2007):</strong> <em>Ley 14/2007, de 3 de julio, de Investigación biomédica</em>. Boletín Oficial del Estado (BOE), núm. 159, de 4 de julio de 2007.
           </div>
         </li>
 
         <li class="item-recurso">
-          <span class="num-recurso">[03]</span>
+          <span class="num-recurso">03.</span>
           <div class="texto-recurso">
-            <strong>Agencia Española de Protección de Datos (AEPD) (2026):</strong> <em>Recomendaciones para fortalecer el cumplimiento de la normativa de protección de datos en la AGE</em>. Madrid: AEPD
+            <strong>Agencia Española de Protección de Datos (AEPD) (2026):</strong> <em>Recomendaciones para fortalecer el cumplimiento de la normativa de protección de datos en la AGE</em>. Madrid: AEPD.
           </div>
         </li>
 
         <li class="item-recurso">
-          <span class="num-recurso">[04]</span>
+          <span class="num-recurso">04.</span>
           <div class="texto-recurso">
             <strong>Shabani, M. y Borry, P. (2018):</strong> <em>Rules for processing genetic data for research purposes in view of the new EU General Data Protection Regulation</em>. European Journal of Human Genetics.
           </div>
         </li>
-
       </ul>
 
     </div>
@@ -854,36 +708,18 @@
   <footer class="pie-pagina">
     <div class="contenedor pie-contenido">
       
-      <!-- [EDITA AQUÍ]: Información de vuestra universidad o centro de estudios -->
       <div>
-        <strong>Proyecto GenoSafe</strong> • Trabajo Académico de Investigación
-        <p style="margin-top: 0.25rem;">Facultad de Ciencias Experimentales / Aspectos Legales y Sociales de la Biotecnología • Conforme a estándares de bioética</p>
+        <strong style="color: var(--color-acento);">Proyecto GenoSafe</strong> • Trabajo Académico de Investigación
+        <p style="margin-top: 0.5rem;">Facultad de Ciencias Experimentales / Aspectos Legales y Sociales de la Biotecnología[cite: 1] • Conforme a estándares de bioética</p>
       </div>
 
-      <!-- [EDITA AQUÍ]: Licencia o año -->
-      <div>
-        Diseñado por el equipo de trabajo • 2026
+      <div style="text-align: right;">
+        Diseñado por GenoSafe • 2026<br>
+        <a href="https://instagram.com/genosafe" style="font-weight: bold; margin-top: 0.5rem; display: inline-block;">Síguenos en @genosafe</a>
       </div>
 
     </div>
   </footer>
-
-  <!-- ========================================================================
-       SCRIPT: CAMBIO DINÁMICO DE PALETA DE COLORES
-       ======================================================================== -->
-  <script>
-    /**
-     * Permite alternar la paleta de colores para que el alumno pueda
-     * previsualizar cómo luce su página con distintas combinaciones.
-     */
-    function cambiarTema(nombreTema) {
-      if (nombreTema === 'teal') {
-        document.documentElement.removeAttribute('data-tema');
-      } else {
-        document.documentElement.setAttribute('data-tema', nombreTema);
-      }
-    }
-  </script>
 
 </body>
 </html>
