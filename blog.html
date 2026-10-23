@@ -362,13 +362,13 @@
 
     /* Responsividad */
     @media (max-width: 820px) {
-      .titulo-blog { font-size: 2.5rem; }
+      .titulo-blog { font-size: 2.2rem; }
       .intro-blog { font-size: 1rem; }
       .cabecera-blog { padding: 3.5rem 0 2.5rem; }
       .entrada {
         grid-template-columns: minmax(0, 1fr);
-        gap: 1.25rem;
-        padding: 2.5rem 0;
+        gap: 2rem;
+        padding: 3rem 5%;
       }
       .entrada-meta { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; }
       .entrada-cuerpo h2 { font-size: 1.6rem; }
@@ -377,9 +377,13 @@
       .pie-contenido > div { text-align: center !important; }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      * { transition: none !important; }
+    @media (max-width: 480px) {
+      .contenedor {
+        padding: 0 4%;
+      }
+      .tarjeta-post {
+        margin-bottom: 0.5rem;
+      }
     }
   </style>
 </head>
