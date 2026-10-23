@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | GenoSafe</title>
+  <meta name="description" content="Blog de GenoSafe: versión ampliada de nuestras publicaciones de Instagram sobre confidencialidad e información genética.">
+  <link rel="icon" type="image/jpeg" href="logo.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       Mismas variables y tipografías que index.html para que el blog
+       se vea como parte de la misma web.
+       Maquetación: cabecera editorial, filtros por tema y entradas en dos
+       columnas (etiqueta a la izquierda, texto a la derecha).
+       ========================================================================== */
+    :root {
+      --color-fondo: #ffffff;
+      --color-texto: #111827;
+      --color-texto-suave: #4b5563;
+      --color-acento: #0f172a;
+      --color-borde: #e5e7eb;
+      --color-hover: #f3f4f6;
+      --color-dorado: #8a6d2b; /* tono del dorado de la tarjeta Halloween, oscurecido para leer sobre blanco */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--color-fondo);
+      color: var(--color-texto);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      color: var(--color-acento);
+    }
+
+    a {
+      color: var(--color-acento);
+      text-decoration: none;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+    a:hover { opacity: 0.7; }
+
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--color-acento);
+      outline-offset: 3px;
+    }
+
+    .contenedor {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Barra de navegación (igual que la web principal) */
+    header.barra-navegacion {
+      background-color: var(--color-fondo);
+      border-bottom: 1px solid var(--color-borde);
+      padding: 1.5rem 0;
+    }
+
+    .nav-contenido {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-grupo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-acento);
+    }
+
+    .logo-icono {
+      width: 32px;
+      height: 32px;
+      background: var(--color-acento);
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    ul.enlaces-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 2rem;
+      list-style: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    ul.enlaces-nav a { color: var(--color-texto-suave); }
+    ul.enlaces-nav a:hover { color: var(--color-acento); opacity: 1; }
+    ul.enlaces-nav a[aria-current="page"] {
+      color: var(--color-acento);
+      border-bottom: 2px solid var(--color-acento);
+      padding-bottom: 2px;
+    }
+
+    /* Cabecera del blog */
+    .cabecera-blog {
+      padding: 5rem 0 3rem;
+    }
+
+    .etiqueta-academica {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      background-color: var(--color-hover);
+      border: 1px solid var(--color-borde);
+      color: var(--color-texto-suave);
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .titulo-blog {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 1.25rem;
+      text-wrap: balance;
+    }
+    .titulo-blog span { font-style: italic; }
+
+    .intro-blog {
+      font-size: 1.15rem;
+      color: var(--color-texto-suave);
+      max-width: 62ch;
+    }
+
+    .enlaces-intro {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.75rem;
+    }
+
+    .enlace-subrayado {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 1px solid var(--color-acento);
+      padding-bottom: 2px;
+      display: inline-block;
+    }
+
+    /* Filtros */
+    .barra-filtros {
+      border-top: 1px solid var(--color-borde);
+      border-bottom: 1px solid var(--color-borde);
+      background: var(--color-hover);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .filtros {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      padding-top: 0.9rem;
+      padding-bottom: 0.9rem;
+    }
+
+    .filtros-etiqueta {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--color-texto-suave);
+      margin-right: 0.75rem;
+    }
+
+    .filtro {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0.5rem 1rem;
+      background: var(--color-fondo);
+      color: var(--color-texto-suave);
+      border: 1px solid var(--color-borde);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    .filtro:hover { border-color: var(--color-acento); color: var(--color-acento); }
+    .filtro[aria-pressed="true"] {
+      background: var(--color-acento);
+      border-color: var(--color-acento);
+      color: #ffffff;
+    }
+
+    /* Entradas */
+    .lista-entradas { padding: 1rem 0 4rem; }
+
+    .entrada {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 2.5rem;
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--color-borde);
+    }
+    .entrada[hidden] { display: none; }
+
+    .entrada-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .tema {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--color-dorado);
+    }
+
+    .fuente {
+      font-size: 0.85rem;
+      color: var(--color-texto-suave);
+      line-height: 1.5;
+    }
+
+    .entrada-cuerpo { min-width: 0; }
+
+    .entrada-cuerpo h2 {
+      font-size: 2rem;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      margin-bottom: 1.25rem;
+      text-wrap: balance;
+    }
+
+    .entrada-cuerpo p {
+      color: var(--color-texto-suave);
+      max-width: 65ch;
+      margin-bottom: 1.1rem;
+    }
+
+    .aviso {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-texto-suave);
+      margin-bottom: 1rem;
+    }
+
+    .idea {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      line-height: 1.45;
+      color: var(--color-acento);
+      border-left: 2px solid var(--color-acento);
+      padding-left: 1.25rem;
+      margin: 1.75rem 0;
+      max-width: 52ch;
+    }
+
+    .pregunta {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-acento);
+      margin-bottom: 1.5rem;
+    }
+
+    .acciones {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem 1.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      background-color: var(--color-acento);
+      color: #ffffff;
+      border: 1px solid var(--color-acento);
+      transition: all 0.3s ease;
+    }
+    .btn:hover { background-color: transparent; color: var(--color-acento); opacity: 1; }
+
+    .sin-resultados {
+      padding: 3rem 0;
+      color: var(--color-texto-suave);
+    }
+
+    /* Cierre */
+    .cierre {
+      background: var(--color-hover);
+      border-top: 1px solid var(--color-borde);
+      border-bottom: 1px solid var(--color-borde);
+      padding: 4rem 0;
+    }
+
+    .cierre-contenido {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem 3rem;
+    }
+
+    .cierre h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    .cierre p { color: var(--color-texto-suave); max-width: 55ch; }
+
+    /* Pie de página (igual que la web principal) */
+    footer.pie-pagina {
+      background-color: var(--color-fondo);
+      border-top: 1px solid var(--color-borde);
+      padding: 4rem 0 3rem;
+      font-size: 0.85rem;
+      color: var(--color-texto-suave);
+    }
+
+    .pie-contenido {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    /* Responsividad */
+    @media (max-width: 820px) {
+      .titulo-blog { font-size: 2.5rem; }
+      .intro-blog { font-size: 1rem; }
+      .cabecera-blog { padding: 3.5rem 0 2.5rem; }
+      .entrada {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.25rem;
+        padding: 2.5rem 0;
+      }
+      .entrada-meta { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1rem; }
+      .entrada-cuerpo h2 { font-size: 1.6rem; }
+      .barra-filtros { position: static; }
+      .pie-contenido { flex-direction: column; text-align: center; }
+      .pie-contenido > div { text-align: center !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================
+       NAVEGACIÓN (enlaza con la web principal)
+       ======================================================================== -->
+  <header class="barra-navegacion">
+    <div class="contenedor nav-contenido">
+      <a href="index.html" class="logo-grupo">
+        <img src="logo.jpeg" alt="Logo" class="logo-icono">
+        <span>GenoSafe</span>
+      </a>
+
+      <nav aria-label="Principal">
+        <ul class="enlaces-nav">
+          <li><a href="index.html#inicio">Inicio</a></li>
+          <li><a href="index.html#proyecto">Proyecto</a></li>
+          <li><a href="index.html#temas">Investigación</a></li>
+          <li><a href="index.html#redes-sociales">Redes</a></li>
+          <li><a href="blog.html" aria-current="page">Blog</a></li>
+          <li><a href="index.html#equipo">Equipo</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       CABECERA DEL BLOG
+       ======================================================================== -->
+  <section class="cabecera-blog">
+    <div class="contenedor">
+      <span class="etiqueta-academica">Blog • Divulgación científica</span>
+      <h1 class="titulo-blog">Lo que publicamos en Instagram, <span>explicado con más calma</span></h1>
+      <p class="intro-blog">
+        Cada entrada amplía una publicación de @genosafe sobre confidencialidad e información genética y enlaza con el post original, para que puedas ver las imágenes, leer los comentarios y contarnos qué opinas.
+      </p>
+      <div class="enlaces-intro">
+        <a href="https://www.instagram.com/genosafe/" target="_blank" rel="noopener" class="enlace-subrayado">Seguir @genosafe ➔</a>
+        <a href="index.html#bibliografia" class="enlace-subrayado">Ver bibliografía ➔</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       FILTROS POR TEMA
+       ======================================================================== -->
+  <div class="barra-filtros">
+    <div class="contenedor filtros" role="group" aria-label="Filtrar entradas por tema">
+      <span class="filtros-etiqueta">Tema</span>
+      <button class="filtro" type="button" data-filtro="todas" aria-pressed="true">Todas</button>
+      <button class="filtro" type="button" data-filtro="proyecto" aria-pressed="false">Proyecto</button>
+      <button class="filtro" type="button" data-filtro="derechos" aria-pressed="false">Derechos y consentimiento</button>
+      <button class="filtro" type="button" data-filtro="riesgos" aria-pressed="false">Riesgos y seguridad</button>
+      <button class="filtro" type="button" data-filtro="bioetica" aria-pressed="false">Bioética y cultura pop</button>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       ENTRADAS
+       ======================================================================== -->
+  <main class="contenedor lista-entradas" id="entradas">
+
+    <!-- Entrada 1 -->
+    <article class="entrada" data-tema="proyecto" id="quienes-somos">
+      <div class="entrada-meta">
+        <span class="tema">Proyecto</span>
+        <span class="fuente">Publicación de presentación en Instagram</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <h2>Quiénes somos y por qué estamos aquí</h2>
+        <p>
+          GenoSafe es el proyecto de seis estudiantes de cuarto de Biotecnología que quieren explicar cómo se protege la información genética. Este primer post de Instagram es nuestra presentación: quiénes somos, de qué vamos a hablar y cómo puedes participar.
+        </p>
+        <p>
+          Publicamos posts, reels y actividades interactivas, y la cuenta está abierta a tus preguntas. Si el tema te interesa, puedes seguirnos, escribirnos para resolver cualquier duda y unirte a las actividades que vayamos proponiendo.
+        </p>
+        <blockquote class="idea">Cualquier persona tiene derecho a entender qué ocurre con su ADN, sepa o no de ciencia.</blockquote>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/DdoQk9OiO3A/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+          <a class="enlace-subrayado" href="index.html#equipo">Conocer al equipo</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Entrada 2 -->
+    <article class="entrada" data-tema="derechos" id="de-quien-es-tu-adn">
+      <div class="entrada-meta">
+        <span class="tema">Derechos y consentimiento</span>
+        <span class="fuente">Versión escrita del reel de Amaia en Instagram</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <h2>¿De quién es realmente tu ADN?</h2>
+        <p>
+          En un reel anterior, nuestra compañera Amaia planteó esta pregunta. Aquí la dejamos por escrito para que siempre tengas una fuente a la que volver. Tu genoma no es solo tuyo: comparte buena parte de su información con tus padres, tus hermanos y tus hijos, así que lo que se sepa de ti también dice cosas de ellos.
+        </p>
+        <p>
+          Por eso la información genética se trata como un dato especial. El Reglamento General de Protección de Datos la incluye entre las categorías que reciben protección reforzada, y la Ley 14/2007 de Investigación biomédica, que aparece en nuestra bibliografía, regula los análisis genéticos y la confidencialidad de sus resultados.
+        </p>
+        <blockquote class="idea">Un dato genético nunca habla de una sola persona.</blockquote>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/Dd1zq8UiAuW/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+          <a class="enlace-subrayado" href="index.html#encuesta">Participar en la encuesta</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Entrada 3 -->
+    <article class="entrada" data-tema="riesgos" id="tests-geneticos-en-casa">
+      <div class="entrada-meta">
+        <span class="tema">Riesgos y seguridad</span>
+        <span class="fuente">Post de Instagram sobre kits genéticos</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <h2>Test genéticos en casa: ¿una realidad regulada?</h2>
+        <p>
+          Descubrir de dónde vienes o qué enfermedades podrían acompañarte suena tentador, y los kits que se piden por internet lo han puesto al alcance de cualquiera. La pregunta que lanzamos en el post es si ese mercado está regulado y qué ocurre con tu muestra y con tus resultados después de enviarlos.
+        </p>
+        <p>
+          Antes de pedir uno, o de regalarlo, conviene saber quién guarda tu saliva, para qué más puede usar la empresa tus datos y qué pasa con la información de tus familiares, que también aparece reflejada en tu perfil. El post anuncia además un reel explicativo sobre si es un buen regalo de cumpleaños o de Navidad, o si estamos desprotegiendo a quien lo recibe.
+        </p>
+        <blockquote class="idea">Regalar un test genético es regalar también los datos de quien lo recibe.</blockquote>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/Dd8XbWiiFR3/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Entrada 4 -->
+    <article class="entrada" data-tema="bioetica" id="mewtwo">
+      <div class="entrada-meta">
+        <span class="tema">Bioética y cultura pop</span>
+        <span class="fuente">Post de Instagram con Mewtwo como ejemplo</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <h2>Mewtwo y el precio de la ambición</h2>
+        <p>
+          En los laboratorios de Isla Canela, el Dr. Fuji y el Team Rocket consiguieron restos biológicos de Mew. Su objetivo no era la medicina, sino crear el arma definitiva modificando su genoma. Mewtwo terminó destruyendo el laboratorio al comprender que solo era un experimento. La historia es ficción, pero muestra qué ocurre cuando la ambición va más rápido que la ética.
+        </p>
+        <p>
+          Tu ADN es la información más íntima e inmutable que tienes. Por eso importa conocer tus derechos frente a biobancos, empresas comerciales y aseguradoras. En nuestra bibliografía está la ley estadounidense GINA, que prohíbe usar la información genética para discriminar en los seguros de salud y en el empleo.
+        </p>
+        <blockquote class="idea">Tu ADN no es un simple archivo digital.</blockquote>
+        <p class="pregunta">Y tú, ¿lo habrías hecho mejor? Cuéntanoslo en los comentarios del post.</p>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/DeZLYlJiJge/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+          <a class="enlace-subrayado" href="index.html#seccion-juegos">Probar los juegos</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Entrada 5 -->
+    <article class="entrada" data-tema="riesgos" id="fugas-de-adn">
+      <div class="entrada-meta">
+        <span class="tema">Riesgos y seguridad</span>
+        <span class="fuente">Post de Instagram con pistas para el Arcade Bioético</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <h2>Por dónde se puede fugar tu ADN</h2>
+        <p>
+          Este post repasa los sitios, los momentos y los clics en los que perdemos el control sobre nuestra información genética. Muchas veces la fuga no empieza con un ataque, sino con un consentimiento aceptado con prisa, una casilla marcada sin leer o un permiso concedido a un tercero.
+        </p>
+        <p>
+          El post completo detalla los puntos concretos. También sirve de ayuda en nuestro Arcade Bioético: incluye algunas pistas para quien se atasque en una pregunta y quiera ganar puntos extra.
+        </p>
+        <blockquote class="idea">El control de tu información genética se pierde en pequeños gestos.</blockquote>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/DeFNrK7CMii/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+          <a class="enlace-subrayado" href="bioethics_arcade.html">Jugar al Arcade Bioético</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Entrada 6 -->
+    <article class="entrada" data-tema="derechos" id="cookies-y-adn">
+      <div class="entrada-meta">
+        <span class="tema">Derechos y consentimiento</span>
+        <span class="fuente">Carrusel de Instagram con QR a la encuesta</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <h2>¿Aceptas las cookies sin leer? ¿Y con tu ADN?</h2>
+        <p>
+          Cada generación se relaciona con su genética de una forma distinta, y la brecha entre nosotros y nuestros padres o abuelos puede ser grande. Muchos aceptamos las cookies sin leerlas. La pregunta es si haríamos lo mismo con nuestro propio ADN.
+        </p>
+        <p>
+          Tu código genético no es una contraseña cualquiera: si se filtra, no se puede cambiar. Protegerlo importa a cualquier edad. La última imagen del carrusel incluye un QR para dejar tu opinión en nuestra encuesta.
+        </p>
+        <blockquote class="idea">Una contraseña filtrada se cambia. Un genoma filtrado, no.</blockquote>
+        <p class="pregunta">¿Eres de los que leen la letra pequeña o de los que lo revisan todo con lupa?</p>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/DeWdRoUiJoC/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+          <a class="enlace-subrayado" href="https://forms.gle/AZ2AegX8UPDQWLE8A" target="_blank" rel="noopener">Responder la encuesta</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Entrada 7 -->
+    <article class="entrada" data-tema="riesgos" id="bio-ciberguerra">
+      <div class="entrada-meta">
+        <span class="tema">Riesgos y seguridad</span>
+        <span class="fuente">Post de Instagram sobre bio-ciberguerra</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <h2>Bio-ciberguerra: el ADN como activo estratégico</h2>
+        <p>
+          Las bases de datos de ADN ya no son solo un recurso científico. Este post plantea que se han convertido en un activo estratégico de interés militar, y se pregunta hasta dónde estamos dispuestos a llegar cuando el código genético de las personas pasa a ser un objetivo de seguridad nacional.
+        </p>
+        <p>
+          La bio-ciberguerra abre preguntas urgentes sobre privacidad, consentimiento y los límites de la tecnología: quién puede acceder a esas bases de datos, con qué finalidad y con qué autorización de las personas cuyos datos contienen. Es el mismo riesgo que explicamos en TikTok al hablar de brechas de seguridad en biobancos.
+        </p>
+        <blockquote class="idea">Cuando la genética entra en la seguridad nacional, el consentimiento de las personas pesa más que nunca.</blockquote>
+        <p class="pregunta">¿Qué opinas tú? Escríbenoslo en los comentarios.</p>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/DejVPeliM0f/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+          <a class="enlace-subrayado" href="https://www.tiktok.com/@genosafe1" target="_blank" rel="noopener">Ver el TikTok</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Entrada 8 -->
+    <article class="entrada" data-tema="bioetica" id="the-last-of-us">
+      <div class="entrada-meta">
+        <span class="tema">Bioética y cultura pop</span>
+        <span class="fuente">Post de Instagram sobre The Last of Us</span>
+      </div>
+      <div class="entrada-cuerpo">
+        <p class="aviso">Contiene spoilers del final de The Last of Us</p>
+        <h2>¿Salvar a la humanidad da derecho a quitarle a alguien su biología?</h2>
+        <p>
+          El final de The Last of Us esconde el gran dilema del derecho sanitario y la investigación biomédica: el choque entre el utilitarismo radical, que defiende el bien común, y la soberanía de la persona sobre su propio cuerpo.
+        </p>
+        <p>
+          La respuesta jurídica se llama consentimiento informado. El Convenio de Oviedo sitúa el interés y el bienestar del ser humano por encima del interés exclusivo de la sociedad o de la ciencia, y la Ley 14/2007 exige consentimiento para obtener y utilizar muestras biológicas con fines de investigación.
+        </p>
+        <blockquote class="idea">La bioética no frena a la ciencia: evita que la ciencia devore a las personas.</blockquote>
+        <p class="pregunta">¿Crees que Marlene tenía justificación médica para actuar sin el consentimiento de Ellie?</p>
+        <div class="acciones">
+          <a class="btn" href="https://www.instagram.com/p/Deq82rdCCKZ/?img_index=1" target="_blank" rel="noopener">Ver el post en Instagram ➔</a>
+          <a class="enlace-subrayado" href="index.html#seccion-juegos">Probar los simuladores</a>
+        </div>
+      </div>
+    </article>
+
+    <p class="sin-resultados" id="sin-resultados" hidden>No hay entradas de este tema todavía.</p>
+
+  </main>
+
+  <!-- ========================================================================
+       CIERRE
+       ======================================================================== -->
+  <section class="cierre">
+    <div class="contenedor cierre-contenido">
+      <div>
+        <h2>¿Tienes alguna duda sobre tu información genética?</h2>
+        <p>Escríbenos por Instagram o responde nuestra encuesta. Tus preguntas nos ayudan a decidir de qué hablar en las próximas publicaciones.</p>
+      </div>
+      <a class="btn" href="https://www.instagram.com/genosafe/" target="_blank" rel="noopener">Ir a @genosafe ➔</a>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       PIE DE PÁGINA
+       ======================================================================== -->
+  <footer class="pie-pagina">
+    <div class="contenedor pie-contenido">
+      <div>
+        <strong style="color: var(--color-acento);">Proyecto GenoSafe</strong> • Trabajo Académico de Investigación
+        <p style="margin-top: 0.5rem;">Facultad de Ciencias Experimentales / Aspectos Legales y Sociales de la Biotecnología • Conforme a estándares de bioética</p>
+      </div>
+      <div style="text-align: right;">
+        Diseñado por GenoSafe • 2026<br>
+        <a href="https://instagram.com/genosafe" target="_blank" rel="noopener" style="font-weight: bold; margin-top: 0.5rem; display: inline-block;">Síguenos en @genosafe</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Filtro por tema. Sin JavaScript, todas las entradas quedan visibles.
+    (function () {
+      var botones = document.querySelectorAll('.filtro');
+      var entradas = document.querySelectorAll('.entrada');
+      var vacio = document.getElementById('sin-resultados');
+
+      function filtrar(tema) {
+        var visibles = 0;
+        entradas.forEach(function (e) {
+          var mostrar = tema === 'todas' || e.getAttribute('data-tema') === tema;
+          e.hidden = !mostrar;
+          if (mostrar) visibles++;
+        });
+        vacio.hidden = visibles !== 0;
+        botones.forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-filtro') === tema ? 'true' : 'false');
+        });
+      }
+
+      botones.forEach(function (b) {
+        b.addEventListener('click', function () { filtrar(b.getAttribute('data-filtro')); });
+      });
+    })();
+  </script>
+
+</body>
+</html>
