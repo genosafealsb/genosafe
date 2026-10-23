@@ -94,6 +94,8 @@
       width: 32px;
       height: 32px;
       background: var(--color-acento);
+      border-radius: 6px;
+      object-fit: cover;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -120,27 +122,7 @@
     nav.enlaces-nav a:hover {
       color: var(--color-acento);
     }
-/* SECCIÓN ENCUESTA */
-    .seccion-encuesta {
-      padding: 100px 5%;
-      text-align: center;
-    }
 
-    .contenedor-encuesta {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .contenedor-encuesta h2 {
-      font-size: 3rem;
-      margin-bottom: 24px;
-    }
-
-    .contenedor-encuesta p {
-      font-size: 1.1rem;
-      color: var(--color-texto-suave);
-      margin-bottom: 40px;
-    }
     /* Portada / Hero */
     .hero {
       padding: 6rem 0 5rem;
@@ -323,9 +305,21 @@
     .tarjeta p {
       font-size: 0.95rem;
       color: var(--color-texto-suave);
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
     }
 
-    /* Miembros del equipo */
+    .btn-tarjeta {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--color-acento);
+      padding-bottom: 2px;
+      display: inline-block;
+      align-self: flex-start;
+    }
+
+    /* Miembros del equipo y Juegos */
     .cuadricula-equipo {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -390,6 +384,144 @@
       padding-bottom: 2px;
       display: inline-block;
       margin-top: 0.5rem;
+    }
+
+    /* SECCIÓN ENCUESTA */
+    .seccion-encuesta {
+      padding: 6rem 5%;
+      text-align: center;
+    }
+
+    .contenedor-encuesta {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .contenedor-encuesta h2 {
+      font-size: 3rem;
+      margin-bottom: 24px;
+    }
+
+    .contenedor-encuesta p {
+      font-size: 1.1rem;
+      color: var(--color-texto-suave);
+      margin-bottom: 40px;
+    }
+
+    /* ==========================================================================
+       NUEVO: CARRUSEL DE REDES SOCIALES
+       ========================================================================== */
+    .carrusel-wrapper {
+      display: flex;
+      overflow-x: auto;
+      gap: 24px;
+      padding-bottom: 20px;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-acento) var(--color-borde);
+    }
+    
+    .carrusel-wrapper::-webkit-scrollbar {
+      height: 8px;
+    }
+    .carrusel-wrapper::-webkit-scrollbar-track {
+      background: var(--color-hover);
+      border-radius: 10px;
+    }
+    .carrusel-wrapper::-webkit-scrollbar-thumb {
+      background: var(--color-acento);
+      border-radius: 10px;
+    }
+
+    .post-social {
+      flex: 0 0 320px;
+      background: var(--color-fondo);
+      border: 1px solid var(--color-borde);
+      border-radius: 12px;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .post-social:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+    }
+
+    .post-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--color-borde);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .post-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-acento);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .post-img {
+      width: 100%;
+      height: 220px;
+      background-color: var(--color-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      border-bottom: 1px solid var(--color-borde);
+      object-fit: cover;
+    }
+
+    .post-body {
+      padding: 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-body h4 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: var(--color-acento);
+    }
+
+    .post-body p {
+      font-size: 0.85rem;
+      color: var(--color-texto-suave);
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+
+    .btn-ver-post {
+      display: block;
+      text-align: center;
+      margin-top: auto;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-acento);
+      text-decoration: none;
+      padding: 10px;
+      border: 1px solid var(--color-borde);
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-ver-post:hover {
+      background: var(--color-hover);
     }
 
     /* Lista bibliográfica / Recursos */
@@ -471,17 +603,17 @@
       <!-- Logo del grupo -->
       <a href="#inicio" class="logo-grupo">
       <img src="logo.jpeg" alt="Logo" class="logo-icono">
-      <span>GenoSafe</span>
+      <span>GenoSafe.</span>
       </a>
 
       <!-- Enlaces del menú superior -->
       <nav>
-        <ul class="enlaces-nav" style="display:flex;list-style:none;gap:20px;margin:0;padding:0;">
+        <ul class="enlaces-nav">
           <li><a href="#inicio">Inicio</a></li>
           <li><a href="#proyecto">Proyecto</a></li>
           <li><a href="#temas">Investigación</a></li>
+          <li><a href="#redes-sociales">Redes</a></li>
           <li><a href="#equipo">Equipo</a></li>
-          <li><a href="#encuesta">Encuesta</a></li>
         </ul>
       </nav>
 
@@ -509,7 +641,7 @@
       <div class="grupo-botones">
         <a href="#proyecto" class="btn btn-principal">Conoce el Proyecto</a>
         <a href="#temas" class="btn btn-secundario">Puntos a Tratar</a>
-        <a href="#seccion-juegos" class="btn btn-secundario">Zona Juegos </a>
+        <a href="#seccion-juegos" class="btn btn-secundario">Zona Juegos</a>
       </div>
 
     </div>
@@ -566,6 +698,7 @@
           <p>
             Nuestro mayor logro siempre será hacer llegar la ciencia a rincones donde no había llegado y era necesaria. Esto surge de la necesidad de proteger a quienes no estudian ciencia, pero tienen derecho a estar informados de lo que ocurre con su ADN.
           </p>
+          <a href="#redes-sociales" class="btn-tarjeta">Ver Publicaciones ➔</a>
         </article>
 
         <article class="tarjeta">
@@ -574,14 +707,16 @@
           <p>
             Estudiaremos cómo de común es conocer nuestros derechos genéticos mediante una encuesta para averiguar cuánto sabe la población general.
           </p>
+          <a href="#encuesta" class="btn-tarjeta">Ir a la Encuesta ➔</a>
         </article>
 
         <article class="tarjeta">
           <div class="icono-tarjeta">III.</div>
           <h3>Ejemplos reales</h3>
           <p>
-            Propondremos ejemplos reales donde podemos correr riesgos, disponibles en nuestras redes sociales como <a href="https://www.instagram.com/genosafe/">Instagram</a> y <a href="https://www.tiktok.com/@genosafe1">TikTok</a>, con contenido divulgativo y audiovisual.
+            Propondremos ejemplos reales donde podemos correr riesgos, disponibles en nuestras redes sociales como Instagram y TikTok, con contenido divulgativo y audiovisual.
           </p>
+          <a href="#redes-sociales" class="btn-tarjeta">Vista Previa IG/TikTok ➔</a>
         </article>
 
         <article class="tarjeta">
@@ -626,20 +761,84 @@
   </div>
   </section> 
   
- <!-- ========================================================================
+  <!-- ========================================================================
        SECCIÓN 6: ENCUESTA
        ======================================================================== -->
   <section id="encuesta" class="seccion-encuesta">
     <div class="contenedor-encuesta">
       <h2>¿Cuánto sabes sobre tus datos genéticos?</h2>
       <p>Queremos averiguar qué tanto sabe la población general sobre el tratamiento de su información genética, los kits de saliva de internet y el secreto familiar. Ayúdanos respondiendo este test rápido.</p>
-      <a href="https://forms.gle/AZ2AegX8UPDQWLE8A" class="btn btn-principal">Participar en la Encuesta</a>
+      <a href="https://forms.gle/AZ2AegX8UPDQWLE8A" target="_blank" class="btn btn-principal">Participar en la Encuesta</a>
     </div>
   </section>
+
+  <!-- ========================================================================
+       NUEVA SECCIÓN: REDES SOCIALES (CARRUSEL)
+       ======================================================================== -->
+  <section id="redes-sociales" class="seccion seccion-alt">
+    <div class="contenedor">
+      <div class="cabecera-seccion">
+        <span class="subtitulo-seccion">Nuestras Redes</span>
+        <h2 class="titulo-seccion">Divulgación Científica</h2>
+        <p class="descripcion-seccion">
+          Echa un vistazo a nuestros últimos posts en Instagram y TikTok donde explicamos la bioética con ejemplos reales y cultura pop.
+        </p>
+      </div>
+
+      <div class="carrusel-wrapper">
+        
+        <!-- Post 1: The Last of Us -->
+        <div class="post-social">
+          <div class="post-header">
+            <div class="post-avatar">GS</div>
+            <span>@genosafe</span>
+          </div>
+          <div class="post-img" style="background: linear-gradient(135deg, #111827, #374151); color: #C9A658; font-family: 'Playfair Display', serif; text-align:center; padding: 20px; font-size: 1.8rem; line-height:1.2;">
+            ¿DONARÍAS<br>TU VIDA<br>POR LA CURA?
+          </div>
+          <div class="post-body">
+            <h4>El Caso Ellie 🍄</h4>
+            <p>El final de The Last of Us esconde el dilema definitivo del derecho sanitario: ¿Salvar a la humanidad da derecho a operar sin consentimiento informado? Ningún avance está por encima de los derechos humanos...</p>
+            <a href="https://instagram.com/genosafe" target="_blank" class="btn-ver-post">Ver en Instagram ➔</a>
+          </div>
+        </div>
+
+        <!-- Post 2: Doraemon -->
+        <div class="post-social">
+          <div class="post-header">
+            <div class="post-avatar">GS</div>
+            <span>@genosafe</span>
+          </div>
+          <div class="post-img">🤖🚨</div>
+          <div class="post-body">
+            <h4>El Expediente Nobita 🧬</h4>
+            <p>¿Por qué el bolsillo de Doraemon es una pesadilla para la protección de datos? Desde clonar con un pelo hasta la cámara del futuro... te explicamos por qué 4 de sus inventos violan el RGPD.</p>
+            <a href="https://instagram.com/genosafe" target="_blank" class="btn-ver-post">Ver Carrusel ➔</a>
+          </div>
+        </div>
+
+        <!-- Post 3: Pokemon -->
+        <div class="post-social">
+          <div class="post-header">
+            <div class="post-avatar">GS</div>
+            <span>@genosafe</span>
+          </div>
+          <div class="post-img">👾🧬</div>
+          <div class="post-body">
+            <h4>El Crimen de Mewtwo ⚡</h4>
+            <p>El Team Rocket no solo eran villanos, ¡también cometieron delitos genéticos graves! Recolección ilícita de ADN, modificación sin comité ético y la mayor fuga de datos de la historia en Isla Canela.</p>
+            <a href="https://tiktok.com/@genosafe1" target="_blank" class="btn-ver-post">Ver en TikTok ➔</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ========================================================================
        SECCIÓN 7: MIEMBROS DEL EQUIPO
        ======================================================================== -->
-  <section id="equipo" class="seccion seccion-alt">
+  <section id="equipo" class="seccion">
     <div class="contenedor">
       
       <div class="cabecera-seccion">
@@ -689,7 +888,7 @@
   <!-- ========================================================================
        SECCIÓN 8: RECURSOS Y BIBLIOGRAFÍA ACADÉMICA
        ======================================================================== -->
-  <section id="bibliografia" class="seccion">
+  <section id="bibliografia" class="seccion seccion-alt">
     <div class="contenedor">
       
       <div class="cabecera-seccion">
@@ -734,7 +933,7 @@
   </section>
 
   <!-- ========================================================================
-       SECCIÓN 8: PIE DE PÁGINA
+       SECCIÓN 9: PIE DE PÁGINA
        ======================================================================== -->
   <footer class="pie-pagina">
     <div class="contenedor pie-contenido">
@@ -746,7 +945,7 @@
 
       <div style="text-align: right;">
         Diseñado por GenoSafe • 2026<br>
-        <a href="https://instagram.com/genosafe" style="font-weight: bold; margin-top: 0.5rem; display: inline-block;">Síguenos en @genosafe</a>
+        <a href="https://instagram.com/genosafe" target="_blank" style="font-weight: bold; margin-top: 0.5rem; display: inline-block;">Síguenos en @genosafe</a>
       </div>
 
     </div>
