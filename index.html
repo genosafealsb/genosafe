@@ -523,6 +523,57 @@
     .btn-ver-post:hover {
       background: var(--color-hover);
     }
+    /* ==========================================================================
+       ESTILOS ESPECIALES: TARJETA HALLOWEEN (CARRUSEL)
+       ========================================================================== */
+    .post-halloween {
+      background-color: #111827; /* Fondo azul noche oscuro */
+      border: 1px solid #ff7a00; /* Borde naranja Halloween */
+      position: relative;
+    }
+
+    /* Tela de araña decorativa CSS */
+    .post-halloween::after {
+      content: '🕸️';
+      position: absolute;
+      top: -15px;
+      right: 5px;
+      font-size: 3rem;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .post-halloween .post-header {
+      border-bottom: 1px solid #ff7a00;
+      color: #d1d5db;
+    }
+
+    .post-halloween .post-avatar {
+      background-color: #ff7a00;
+      color: #111827;
+    }
+
+    .post-halloween .post-img {
+      border-bottom: 1px solid #ff7a00;
+    }
+
+    .post-halloween .post-body h4 {
+      color: #ff7a00;
+    }
+
+    .post-halloween .post-body p {
+      color: #d1d5db;
+    }
+
+    .post-halloween .btn-ver-post {
+      color: #ff7a00;
+      border-color: #ff7a00;
+    }
+
+    .post-halloween .btn-ver-post:hover {
+      background-color: rgba(255, 122, 0, 0.1);
+    }
 
     /* Lista bibliográfica / Recursos */
     .lista-recursos {
@@ -789,13 +840,13 @@
       <div class="carrusel-wrapper">
         
         <!-- Post 1: Halloween -->
-        <div class="post-social">
+        <div class="post-social post-halloween">
           <div class="post-header">
             <img src="logo.jpeg" alt="GenoSafe" class="logo-icono">
             <span>@genosafe</span>
           </div>
           <div class="post-img" style="background: linear-gradient(135deg, #111827, #374151); color: #C9A658; font-family: 'Playfair Display', serif; text-align:center; padding: 20px; font-size: 1.8rem; line-height:1.2;">
-            SECCIÓN<br>HALLOWEEN
+            ESPECIAL<br>HALLOWEEN
           </div>
           <div class="post-body">
             <h4>Confidencialidad genética y Monstruos 🎃</h4>
